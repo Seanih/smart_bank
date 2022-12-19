@@ -95,7 +95,7 @@ contract Bank {
             "You can't transfer more than you have deposited"
         );
 
-        (bool transferred, ) = payable(msg.sender).call{value: _amount}("");
+        (bool transferred, ) = _to.call{value: _amount}("");
 
         require(transferred, "There was an error - please try again");
 
@@ -110,6 +110,8 @@ contract Bank {
         public
         returns (bool success)
     {
+        require(_to != address(0), "Can't send funds to a '0' address");
+        
         transfer(_to, _amount);
 
         return success;

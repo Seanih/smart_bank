@@ -72,6 +72,27 @@ describe('Bank Contract', () => {
 					[numTokensInWei(-0.25), numTokensInWei(0.25)]
 				);
 			});
+
+			it('transfers funds from contract & reflects balance changes', async () => {
+				const { user1, user2, BankContract } = await deployContractFixture();
+
+				let tx = await BankContract.connect(user1).depositFunds({
+					value: numTokensInWei(3),
+				});
+				await tx.wait();
+
+				await expect(
+					BankContract.connect(user1).transferFromBank(
+						user2.address,
+						numTokensInWei(1.75)
+					)
+				).to.changeEtherBalances(
+					[BankContract, user2],
+					[numTokensInWei(-1.75), numTokensInWei(1.75)]
+				);
+			});
 		});
+
+		describe('Emits Appropriate Events', () => {});
 	});
 });

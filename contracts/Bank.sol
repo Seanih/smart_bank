@@ -13,7 +13,7 @@ contract Bank {
         address user;
         address recipient;
         uint256 amount;
-        string txType; // deposit or withdrawal
+        string txType; // deposit, withdrawal or transfer
         uint256 time;
     }
 
@@ -31,7 +31,7 @@ contract Bank {
         uint256 indexed time
     );
 
-    event FundsTransfered(
+    event FundsTransferred(
         address indexed from,
         address indexed to,
         uint256 indexed amount,
@@ -77,13 +77,13 @@ contract Bank {
             TxLog(
                 msg.sender,
                 msg.sender,
-                msg.value,
+                _amount,
                 "withdrawal",
                 block.timestamp
             )
         );
 
-        emit FundsWithdrawn(msg.sender, msg.value, block.timestamp);
+        emit FundsWithdrawn(msg.sender, _amount, block.timestamp);
     }
 
     function transfer(address payable _to, uint256 _amount) internal {
@@ -100,10 +100,10 @@ contract Bank {
         require(transferred, "There was an error - please try again");
 
         allTransactions.push(
-            TxLog(msg.sender, _to, msg.value, "transfer", block.timestamp)
+            TxLog(msg.sender, _to, _amount, "transfer", block.timestamp)
         );
 
-        emit FundsTransfered(msg.sender, _to, _amount, block.timestamp);
+        emit FundsTransferred(msg.sender, _to, _amount, block.timestamp);
     }
 
     function transferFromBank(address payable _to, uint256 _amount)
@@ -111,9 +111,13 @@ contract Bank {
         returns (bool success)
     {
         require(_to != address(0), "Can't send funds to a '0' address");
-        
+
         transfer(_to, _amount);
 
         return success;
+    }
+
+    function showAllTransactions() external view returns (TxLog[] memory) {
+        return allTransactions;
     }
 }

@@ -87,7 +87,7 @@ contract Bank {
     }
 
     function transfer(address payable _to, uint256 _amount) internal {
-        require(msg.value > 0, "amount cannot be 0 or less");
+        require(_amount > 0, "amount cannot be 0 or less");
 
         //make sure customer transfer doesn't exceed deposits
         require(

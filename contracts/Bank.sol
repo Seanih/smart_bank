@@ -61,7 +61,7 @@ contract Bank {
     }
 
     function withdrawFunds(uint256 _amount) external payable {
-        require(msg.value > 0, "amount cannot be 0 or less");
+        require(_amount > 0, "amount cannot be 0 or less");
 
         //make sure customer withdrawal doesn't exceed deposits
         require(

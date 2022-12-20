@@ -10,17 +10,17 @@ function numEthInWei(num) {
 }
 
 describe('Bank Contract', () => {
+	async function deployContractFixture() {
+		const [owner, user1, user2] = await ethers.getSigners();
+
+		const contract = await ethers.getContractFactory('Bank');
+		const BankContract = await contract.deploy();
+		await BankContract.deployed();
+
+		return { owner, user1, user2, BankContract };
+	}
+
 	describe('Success', () => {
-		async function deployContractFixture() {
-			const [owner, user1, user2] = await ethers.getSigners();
-
-			const contract = await ethers.getContractFactory('Bank');
-			const BankContract = await contract.deploy();
-			await BankContract.deployed();
-
-			return { owner, user1, user2, BankContract };
-		}
-
 		describe('Deploy Contract', async () => {
 			it('deploys contract', async () => {
 				const { BankContract } = await loadFixture(deployContractFixture);
@@ -47,12 +47,17 @@ describe('Bank Contract', () => {
 				expect(await BankContract.getContractBalance()).to.equal(amount);
 			});
 
-			it('reflects balance changes after deposits', async () => {
+			it('reflects correct balance changes after deposits', async () => {
 				const { user1, BankContract } = await loadFixture(
 					deployContractFixture
 				);
 
 				let amount = numEthInWei(0.5);
+
+				let tx = await BankContract.connect(user1).depositFunds({
+					value: amount,
+				});
+				await tx.wait();
 
 				await expect(
 					BankContract.connect(user1).depositFunds({
@@ -62,6 +67,10 @@ describe('Bank Contract', () => {
 					[BankContract, user1],
 					[amount, numEthInWei(-0.5)]
 				);
+
+				expect(await BankContract.customerBalances(user1.address)).to.equal(
+					numEthInWei(1)
+				);
 			});
 
 			it('reflects balance changes after withdrawals', async () => {
@@ -70,19 +79,26 @@ describe('Bank Contract', () => {
 				);
 
 				let tx = await BankContract.connect(user1).depositFunds({
-					value: numEthInWei(0.5),
+					value: numEthInWei(1),
 				});
 				await tx.wait();
 
 				await expect(
-					BankContract.connect(user1).withdrawFunds(numEthInWei(0.25))
+					BankContract.connect(user1).withdrawFunds(numEthInWei(0.5))
 				).to.changeEtherBalances(
 					[BankContract, user1],
-					[numEthInWei(-0.25), numEthInWei(0.25)]
+					[numEthInWei(-0.5), numEthInWei(0.5)]
+				);
+
+				tx = await BankContract.connect(user1).withdrawFunds(numEthInWei(0.3));
+				await tx.wait();
+
+				expect(await BankContract.customerBalances(user1.address)).to.equal(
+					numEthInWei(0.2)
 				);
 			});
 
-			it('transfers funds from contract & reflects balance changes', async () => {
+			it('reflects balance changes after contract transfers', async () => {
 				const { user1, user2, BankContract } = await loadFixture(
 					deployContractFixture
 				);
@@ -100,6 +116,14 @@ describe('Bank Contract', () => {
 				).to.changeEtherBalances(
 					[BankContract, user2],
 					[numEthInWei(-1.75), numEthInWei(1.75)]
+				);
+
+				expect(await BankContract.customerBalances(user1.address)).to.equal(
+					numEthInWei(1.25)
+				);
+
+				expect(await BankContract.customerBalances(user2.address)).to.equal(
+					numEthInWei(1.75)
 				);
 			});
 
@@ -189,6 +213,60 @@ describe('Bank Contract', () => {
 						numEthInWei(0.75),
 						((await time.latest()) + 1).toString()
 					);
+			});
+		});
+	});
+
+	describe('Failure', () => {
+		describe('Reject Transactions', () => {
+			it('rejects withdrawals > deposited balance', async () => {
+				const { BankContract, user1 } = await loadFixture(
+					deployContractFixture
+				);
+
+				let tx = await BankContract.connect(user1).depositFunds({
+					value: numEthInWei(2),
+				});
+				await tx.wait();
+
+				await expect(BankContract.connect(user1).withdrawFunds(numEthInWei(3)))
+					.to.be.reverted;
+			});
+
+			it('rejects transfers > deposited balance', async () => {
+				const { BankContract, user1, user2 } = await loadFixture(
+					deployContractFixture
+				);
+
+				let tx = await BankContract.connect(user1).depositFunds({
+					value: numEthInWei(2),
+				});
+				await tx.wait();
+
+				await expect(
+					BankContract.connect(user1).transferFromBank(
+						user2.address,
+						numEthInWei(3)
+					)
+				).to.be.reverted;
+			});
+			
+      it('rejects transfers to "0" accounts', async () => {
+				const { BankContract, user1, user2 } = await loadFixture(
+					deployContractFixture
+				);
+
+				let tx = await BankContract.connect(user1).depositFunds({
+					value: numEthInWei(2),
+				});
+				await tx.wait();
+
+				await expect(
+					BankContract.connect(user1).transferFromBank(
+						'0x0000000000000000000000000000000000000000',
+						numEthInWei(3)
+					)
+				).to.be.reverted;
 			});
 		});
 	});

@@ -71,6 +71,8 @@ contract Bank {
 
         (bool withdrawn, ) = payable(msg.sender).call{value: _amount}("");
 
+        customerBalances[msg.sender] -= _amount;
+
         require(withdrawn, "There was an error - please try again");
 
         allTransactions.push(
@@ -96,6 +98,9 @@ contract Bank {
         );
 
         (bool transferred, ) = _to.call{value: _amount}("");
+
+        customerBalances[msg.sender] -= _amount;
+        customerBalances[_to] += _amount;
 
         require(transferred, "There was an error - please try again");
 

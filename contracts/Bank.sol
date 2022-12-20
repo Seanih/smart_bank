@@ -112,7 +112,7 @@ contract Bank {
     }
 
     function transferFromBank(address payable _to, uint256 _amount)
-        public
+        external
         returns (bool success)
     {
         require(_to != address(0), "Can't send funds to a '0' address");

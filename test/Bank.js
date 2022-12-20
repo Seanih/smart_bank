@@ -250,8 +250,8 @@ describe('Bank Contract', () => {
 					)
 				).to.be.reverted;
 			});
-			
-      it('rejects transfers to "0" accounts', async () => {
+
+			it('rejects transfers to "0" accounts', async () => {
 				const { BankContract, user1, user2 } = await loadFixture(
 					deployContractFixture
 				);
@@ -266,7 +266,7 @@ describe('Bank Contract', () => {
 						'0x0000000000000000000000000000000000000000',
 						numEthInWei(3)
 					)
-				).to.be.reverted;
+				).to.be.revertedWith("Can't send funds to a '0' address");
 			});
 		});
 	});

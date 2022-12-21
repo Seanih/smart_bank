@@ -121,10 +121,6 @@ describe('Bank Contract', () => {
 				expect(await BankContract.customerBalances(user1.address)).to.equal(
 					numEthInWei(1.25)
 				);
-
-				expect(await BankContract.customerBalances(user2.address)).to.equal(
-					numEthInWei(1.75)
-				);
 			});
 
 			it('updates "allTransactions" after successful transactions', async () => {

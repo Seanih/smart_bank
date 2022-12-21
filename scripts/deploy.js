@@ -19,7 +19,7 @@ async function main() {
 	console.log(`BankContract address: ${BankContract.address}`);
 
 	// create transactions to populate data
-	// -------- DEPOSITS --------
+	//! -------- DEPOSITS --------
 	let tx = await BankContract.depositFunds({ value: numEthInWei(4.5) });
 	await tx.wait();
 	console.log(
@@ -48,7 +48,7 @@ async function main() {
 		)} ETH`
 	);
 
-	// -------- WITHDRAWALS --------
+	//! -------- WITHDRAWALS --------
 	tx = await BankContract.withdrawFunds(numEthInWei(1.25));
 	await tx.wait();
 	console.log(`user1 withdrew 1.25 ETH`);
@@ -57,7 +57,7 @@ async function main() {
 	await tx.wait();
 	console.log(`user2 withdrew 3.39 ETH`);
 
-	// -------- TRANSFERS --------
+	//! -------- TRANSFERS --------
 	tx = await BankContract.connect(user2).transferFromBank(
 		user3.address,
 		numEthInWei(1)

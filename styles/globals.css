@@ -11,6 +11,16 @@
 	}
 }
 
+@layer components {
+	.btn {
+		@apply px-4 font-semibold border-2 border-slate-700 hover:bg-slate-700 hover:text-gray-200 ease-in duration-100 rounded-lg;
+	}
+
+	.page-container {
+		@apply h-screen w-full flex justify-center items-center bg-gradient-to-br from-black via-cyan-900 to-gray-900;
+	}
+}
+
 html,
 body {
 	padding: 0;

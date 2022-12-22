@@ -14,5 +14,5 @@ const loggedTxSchema = new Schema({
 
 // export model to interact with the collection
 // assign model only if it's not asigned already
-export default mongoose.models.BankTxData ||
-	mongoose.model('BankTxData', loggedTxSchema);
+export default mongoose.models.BankTxLogs ||
+	mongoose.model('BankTxLogs', loggedTxSchema);

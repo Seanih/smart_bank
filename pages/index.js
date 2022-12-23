@@ -16,10 +16,10 @@ export default function Home() {
 						Smart Bank
 					</span>
 				</h1>
-				<p>Please log in with a Web3 account to begin using our services</p>
+				<p>Please sign in with a Web3 account to begin using our services</p>
 				<Link href={'/signin'}>
 					<button className='btn py-2 mt-5 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
-						Log In{' '}
+						Sign In{' '}
 					</button>
 				</Link>
 			</main>

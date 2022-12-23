@@ -14,6 +14,10 @@
 	h3 {
 		@apply text-xl;
 	}
+
+	body {
+		@apply from-black via-cyan-900 to-gray-900;
+	}
 }
 
 @layer components {
@@ -22,7 +26,7 @@
 	}
 
 	.page-container {
-		@apply h-screen w-full flex flex-col justify-center items-center bg-gradient-to-br from-black via-cyan-900 to-gray-900;
+		@apply h-screen w-full flex flex-col justify-center items-center bg-gradient-to-br;
 	}
 }
 

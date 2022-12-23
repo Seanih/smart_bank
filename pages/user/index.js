@@ -9,16 +9,28 @@ import Link from 'next/link';
 function User({ user }) {
 	const [currentAccount, setCurrentAccount] = useState('');
 	const [ethBalance, setEthBalance] = useState(0);
+	const [usdValue, setUsdValue] = useState(0);
 
 	const bankContractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+
+	const getEthInUsd = async () => {
+		const response = await fetch(
+			'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD'
+		);
+		const data = await response.json();
+		const exchangeRate = data.USD;
+		return exchangeRate;
+	};
 
 	useEffect(() => {
 		async function getWalletBalance(address) {
 			const provider = new ethers.providers.Web3Provider(window.ethereum);
 			const balance = await provider.getBalance(address);
 			const balanceInEth = ethers.utils.formatEther(balance);
+			const valueInUsd = await getEthInUsd();
 
 			setEthBalance(Number(balanceInEth).toFixed(4));
+			setUsdValue(valueInUsd);
 		}
 
 		if (user) {
@@ -49,8 +61,12 @@ function User({ user }) {
 					)}`}
 				</h2>
 				<p className='pt-4'>
-					Current Wallet Balance:{' '}
+					Current ETH Balance:{' '}
 					<span className='font-bold text-green-700'>{ethBalance}</span>
+				</p>
+				<p className='pt-4'>
+					USD Value: $
+					<span className='font-bold text-green-700'>{usdValue}</span>
 				</p>
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<p className='py-5'>Which service would you like to use?</p>

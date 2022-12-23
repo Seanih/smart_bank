@@ -4,20 +4,25 @@
 
 @layer base {
 	h1 {
+		@apply text-3xl;
+	}
+
+	h2 {
 		@apply text-2xl;
 	}
-	h2 {
+
+	h3 {
 		@apply text-xl;
 	}
 }
 
 @layer components {
 	.btn {
-		@apply px-4 font-semibold border-2 border-slate-700 hover:bg-slate-700 hover:text-gray-200 ease-in duration-100 rounded-lg;
+		@apply px-4 font-semibold border-2 border-slate-700 hover:bg-green-700 hover:text-gray-200 hover:scale-110 ease-in duration-100 rounded-lg;
 	}
 
 	.page-container {
-		@apply h-screen w-full flex justify-center items-center bg-gradient-to-br from-black via-cyan-900 to-gray-900;
+		@apply h-screen w-full flex flex-col justify-center items-center bg-gradient-to-br from-black via-cyan-900 to-gray-900;
 	}
 }
 

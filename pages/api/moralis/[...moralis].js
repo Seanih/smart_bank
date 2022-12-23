@@ -5,6 +5,6 @@ export default MoralisNextApi({
 	authentication: {
 		domain: 'coldbank.com',
 		uri: process.env.NEXTAUTH_URL,
-		timeout: 120,
+		timeout: 45,
 	},
 });

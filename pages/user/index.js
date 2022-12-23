@@ -11,8 +11,6 @@ function User({ user }) {
 	const [ethBalance, setEthBalance] = useState(0);
 	const [usdValue, setUsdValue] = useState(0);
 
-	const bankContractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
-
 	const getEthInUsd = async () => {
 		const response = await fetch(
 			'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD'
@@ -47,7 +45,7 @@ function User({ user }) {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
-			<main className='flex flex-col rounded-xl justify-center items-center py-8 w-[80%] md:w-[70%] bg-gray-300 text-black'>
+			<main className='flex flex-col rounded-xl justify-center items-center py-8 w-[80%] md:w-[70%] bg-gray-200 text-black'>
 				<h1 className='mb-4'>
 					Welcome to{' '}
 					<span className='font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-700 via-cyan-600 to-gray-700'>
@@ -55,16 +53,18 @@ function User({ user }) {
 					</span>
 				</h1>
 				<h2>
-					Hello,{' '}
-					{`${currentAccount.slice(0, 4)}...${currentAccount.slice(
-						currentAccount.length - 4
-					)}`}
+					Connected Wallet:{' '}
+					<span className='text-gray-600 font-bold'>
+						{`${currentAccount.slice(0, 4)}...${currentAccount.slice(
+							currentAccount.length - 4
+						)}`}
+					</span>
 				</h2>
 				<p className='pt-4'>
 					Current ETH Balance:{' '}
 					<span className='font-bold text-green-700'>{ethBalance}</span>
 				</p>
-				<p className='pt-4'>
+				<p className='pt-2'>
 					USD Value: $
 					<span className='font-bold text-green-700'>{usdValue}</span>
 				</p>

@@ -1,19 +1,29 @@
-function ModalBox({
+import { useState } from 'react';
+
+function ModalTester({
 	currentAccount,
 	ethBalance,
 	usdValue,
 	depositAmt,
-	toggleModal,
+	showDepositModal,
+	toggleShowModal,
 }) {
+	// const [showDepositModal, setShowDepositModal] = useState(false);
+	// const toggleShowModal = () => setShowDepositModal(!showDepositModal);
+
 	return (
 		<div
 			className={
-				'absolute h-screen w-full bg-black/30 flex justify-center items-center ease-in duration-500'
+				showDepositModal
+					? 'absolute h-screen w-full bg-black/30 flex justify-center items-center ease-in-out duration-500'
+					: 'absolute -z-10 duration-300 ease-in-out '
 			}
 		>
 			<div
 				className={
-					'bg-gray-100 text-black h-[50%] w-[50%] flex flex-col justify-center items-center rounded-md'
+					showDepositModal
+						? 'relative bg-gray-100 text-black h-[50%] w-[50%] flex flex-col justify-center items-center rounded-md top-0 ease-in-out duration-300'
+						: 'top-full duration-300 ease-in-out '
 				}
 			>
 				<h3 className='font-medium'>Please verify transaction details:</h3>
@@ -29,13 +39,13 @@ function ModalBox({
 				<div className='grid grid-cols-2 gap-2'>
 					<button
 						className='btn hover:scale-105 py-1 mt-2 bg-red-400 hover:bg-red-600 hover:text-white'
-						onClick={() => toggleModal()}
+						onClick={() => toggleShowModal()}
 					>
 						Cancel
 					</button>
 					<button
 						className='btn hover:scale-105 py-1 mt-2'
-						onClick={() => toggleModal()}
+						onClick={() => toggleShowModal()}
 					>
 						Confirm Deposit
 					</button>
@@ -44,4 +54,4 @@ function ModalBox({
 		</div>
 	);
 }
-export default ModalBox;
+export default ModalTester;

@@ -9,7 +9,7 @@ function Navbar() {
 
 	return (
 		<div
-			className='fixed top-0 w-full bg-gray-500 h-20 shadow-xl z-[100] cursor-pointer'
+			className='absolute top-0 w-full bg-gray-500 h-20 shadow-xl cursor-pointer'
 			onClick={handleNav}
 		>
 			{/* -------- side menu -------- */}

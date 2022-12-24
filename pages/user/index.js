@@ -10,6 +10,7 @@ function User({ user }) {
 	const [currentAccount, setCurrentAccount] = useState('');
 	const [ethBalance, setEthBalance] = useState(0);
 	const [usdValue, setUsdValue] = useState(0);
+	const [depositedBalance, setDepositedBalance] = useState(0);
 
 	const getEthInUsd = async () => {
 		const response = await fetch(
@@ -61,24 +62,34 @@ function User({ user }) {
 					</span>
 				</h2>
 				<p className='pt-4'>
-					Current ETH Balance:{' '}
+					Wallet ETH Balance:{' '}
 					<span className='font-bold text-green-700'>{ethBalance}</span>
 				</p>
-				<p className='pt-2'>
-					USD Value: $
+				<p>
+					Wallet USD Value: $
 					<span className='font-bold text-green-700'>{usdValue}</span>
+				</p>
+				<p className='pt-4'>
+					Deposited ETH Balance:{' '}
+					<span className='font-bold text-green-700'>{depositedBalance}</span>
+				</p>
+				<p>
+					Deposited USD Value: $
+					<span className='font-bold text-green-700'>
+						{usdValue * depositedBalance}
+					</span>
 				</p>
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<p className='py-5'>Which service would you like to use?</p>
 				<div className='grid grid-cols-3 gap-3'>
 					<button className='btn'>
-						<Link href={'/deposit'}>Deposit</Link>
+						<Link href={'/user/deposit'}>Deposit</Link>
 					</button>
 					<button className='btn'>
-						<Link href={'/withdraw'}>Withdraw</Link>
+						<Link href={'/user/withdraw'}>Withdraw</Link>
 					</button>
 					<button className='btn'>
-						<Link href={'/transfer'}>Transfer</Link>
+						<Link href={'/user/transfer'}>Transfer</Link>
 					</button>
 				</div>
 
@@ -88,7 +99,7 @@ function User({ user }) {
 					className='btn py-2 mt-4 bg-red-400 hover:bg-red-600 hover:text-white'
 					onClick={() => signOut({ redirect: '/signin' })}
 				>
-					Sign out
+					Sign Out
 				</button>
 			</main>
 		</div>

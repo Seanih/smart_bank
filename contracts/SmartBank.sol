@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-contract Bank {
+contract SmartBank {
     address public owner;
     mapping(address => uint256) public customerBalances;
 

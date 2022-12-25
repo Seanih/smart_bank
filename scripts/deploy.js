@@ -12,67 +12,67 @@ const readableEth = num => ethers.utils.formatEther(num).toLowerCase();
 async function main() {
 	const [user1, user2, user3] = await ethers.getSigners();
 
-	const contract = await ethers.getContractFactory('Bank');
-	const BankContract = await contract.deploy();
-	await BankContract.deployed();
+	const contract = await ethers.getContractFactory('SmartBank');
+	const SmartBankContract = await contract.deploy();
+	await SmartBankContract.deployed();
 
-	console.log(`BankContract address: ${BankContract.address}`);
+	console.log(`SmartBankContract address: ${SmartBankContract.address}`);
 
 	// create transactions to populate data
 	//! -------- DEPOSITS --------
-	let tx = await BankContract.depositFunds({ value: numEthInWei(4.5) });
+	let tx = await SmartBankContract.depositFunds({ value: numEthInWei(4.5) });
 	await tx.wait();
 	console.log(
 		`deposited ${readableEth(
-			await BankContract.customerBalances(user1.address)
+			await SmartBankContract.customerBalances(user1.address)
 		)} ETH`
 	);
 
-	tx = await BankContract.connect(user2).depositFunds({
+	tx = await SmartBankContract.connect(user2).depositFunds({
 		value: numEthInWei(5),
 	});
 	await tx.wait();
 	console.log(
 		`deposited ${readableEth(
-			await BankContract.customerBalances(user2.address)
+			await SmartBankContract.customerBalances(user2.address)
 		)} ETH`
 	);
 
-	tx = await BankContract.connect(user3).depositFunds({
+	tx = await SmartBankContract.connect(user3).depositFunds({
 		value: numEthInWei(2.8),
 	});
 	await tx.wait();
 	console.log(
 		`deposited ${readableEth(
-			await BankContract.customerBalances(user3.address)
+			await SmartBankContract.customerBalances(user3.address)
 		)} ETH`
 	);
 
 	//! -------- WITHDRAWALS --------
-	tx = await BankContract.withdrawFunds(numEthInWei(1.25));
+	tx = await SmartBankContract.withdrawFunds(numEthInWei(1.25));
 	await tx.wait();
 	console.log(`user1 withdrew 1.25 ETH`);
 
-	tx = await BankContract.connect(user2).withdrawFunds(numEthInWei(3.39));
+	tx = await SmartBankContract.connect(user2).withdrawFunds(numEthInWei(3.39));
 	await tx.wait();
 	console.log(`user2 withdrew 3.39 ETH`);
 
 	//! -------- TRANSFERS --------
-	tx = await BankContract.connect(user2).transferFromBank(
+	tx = await SmartBankContract.connect(user2).transferFromBank(
 		user3.address,
 		numEthInWei(1)
 	);
 	await tx.wait();
 	console.log(`user2 transferred 1 ETH`);
 
-	tx = await BankContract.connect(user3).transferFromBank(
+	tx = await SmartBankContract.connect(user3).transferFromBank(
 		user1.address,
 		numEthInWei(0.75)
 	);
 	await tx.wait();
 	console.log(`user3 transferred 0.75 ETH`);
 
-	tx = await BankContract.connect(user1).transferFromBank(
+	tx = await SmartBankContract.connect(user1).transferFromBank(
 		user3.address,
 		numEthInWei(1.4)
 	);

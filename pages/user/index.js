@@ -68,7 +68,9 @@ function User({ user }) {
 				</p>
 				<p>
 					Wallet USD Value: $
-					<span className='font-bold text-green-700'>{usdValue}</span>
+					<span className='font-bold text-green-700'>
+						{(usdValue * ethBalance).toFixed(2)}
+					</span>
 				</p>
 				<p className='pt-4'>
 					Deposited ETH Balance:{' '}
@@ -77,7 +79,7 @@ function User({ user }) {
 				<p>
 					Deposited USD Value: $
 					<span className='font-bold text-green-700'>
-						{usdValue * depositedBalance}
+						{(usdValue * depositedBalance).toFixed(2)}
 					</span>
 				</p>
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />

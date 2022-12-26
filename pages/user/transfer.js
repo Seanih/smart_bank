@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-function transfer() {
+function Transfer() {
 	return (
 		<div className='page-container'>
 			<main className='flex flex-col rounded-xl justify-center items-center py-8 w-[80%] md:w-[70%] bg-gray-200 text-black'>
@@ -11,4 +11,4 @@ function transfer() {
 		</div>
 	);
 }
-export default transfer;
+export default Transfer;

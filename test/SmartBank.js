@@ -25,6 +25,7 @@ describe('Bank Contract', () => {
 			it('deploys contract', async () => {
 				const { SmartBankContract } = await loadFixture(deployContractFixture);
 
+				console.log('goerli pk: ', process.env.GOERLI_DEV_PK)
 				expect(SmartBankContract.address).to.equal(
 					'0x5FbDB2315678afecb367f032d93F642f64180aa3'
 				);

@@ -14,13 +14,14 @@ function Deposit({ user }) {
 	const [usdValue, setUsdValue] = useState(0);
 	const [depositAmt, setDepositAmt] = useState(0);
 	const [showDepositModal, setShowDepositModal] = useState(false);
+	const [depErrorMsg, setDepErrorMsg] = useState('');
 
 	const router = useRouter();
 
 	const toggleShowModal = () => setShowDepositModal(!showDepositModal);
 
 	// HardHat contract address
-	const bankContractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
 
 	const getEthInUsd = async () => {
 		const response = await fetch(
@@ -52,15 +53,17 @@ function Deposit({ user }) {
 
 				await depositTxn.wait();
 
-				console.log('mined ', depositTxn.hash);
+				console.log('mined deposit transaction', depositTxn.hash);
 
-				// Clear the form fields.
+				// Clear the deposit field
 				setDepositAmt(0);
 
-				router.push('/user');
+				router.push('/txhistory');
 			}
 		} catch (error) {
-			console.log(error);
+			setShowDepositModal(!showDepositModal);
+			setDepErrorMsg(error.message);
+			console.log(error.message);
 		}
 	};
 
@@ -110,7 +113,9 @@ function Deposit({ user }) {
 				</p>
 				<p className='pt-2'>
 					Wallet USD Value: $
-					<span className='font-bold text-green-700'>{usdValue}</span>
+					<span className='font-bold text-green-700'>
+						{(usdValue * ethBalance).toFixed(2)}
+					</span>
 				</p>
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<div className='mb-4'>
@@ -134,6 +139,7 @@ function Deposit({ user }) {
 					</button>
 				</div>
 			</main>
+
 			<DepositModal
 				currentAccount={currentAccount}
 				ethBalance={ethBalance}
@@ -141,6 +147,7 @@ function Deposit({ user }) {
 				depositAmt={depositAmt}
 				showDepositModal={showDepositModal}
 				toggleShowModal={toggleShowModal}
+				depositEth={depositEth}
 			/>
 		</div>
 	);

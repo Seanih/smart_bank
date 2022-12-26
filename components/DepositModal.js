@@ -1,11 +1,10 @@
-import { useState } from 'react';
-
 function DepositModal({
 	currentAccount,
 	ethBalance,
 	depositAmt,
 	showDepositModal,
 	toggleShowModal,
+	depositEth,
 }) {
 	return (
 		<div
@@ -69,13 +68,13 @@ function DepositModal({
 				<div className='grid grid-cols-2 gap-2'>
 					<button
 						className='btn hover:scale-105 py-1 mt-2 bg-red-400 hover:bg-red-600 hover:text-white'
-						onClick={() => toggleShowModal()}
+						onClick={toggleShowModal}
 					>
 						Cancel
 					</button>
 					<button
 						className='btn hover:scale-105 py-1 mt-2'
-						onClick={() => toggleShowModal()}
+						onClick={depositEth}
 					>
 						Confirm Deposit
 					</button>

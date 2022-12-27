@@ -13,6 +13,10 @@ function User({ user }) {
 	const [usdValue, setUsdValue] = useState(0);
 	const [depositedBalance, setDepositedBalance] = useState(0);
 
+	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
+
+	const weiToEth = num => ethers.utils.formatEther(num);
+
 	const getEthInUsd = async () => {
 		const response = await fetch(
 			'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD'
@@ -33,11 +37,38 @@ function User({ user }) {
 			setUsdValue(valueInUsd);
 		}
 
+		const getUserBankBalance = async () => {
+			console.log('getting user balance');
+
+			try {
+				const { ethereum } = window;
+
+				if (ethereum) {
+					const provider = new ethers.providers.Web3Provider(ethereum, 'any');
+					const signer = provider.getSigner();
+					const SmartBankContract = new ethers.Contract(
+						bankContractAddress,
+						abi,
+						signer
+					);
+
+					const userBankBalance = await SmartBankContract.customerBalances(
+						currentAccount
+					);
+
+					setDepositedBalance(Number(weiToEth(userBankBalance)));
+				}
+			} catch (error) {
+				console.log(error.message);
+			}
+		};
+
 		if (user) {
+			getUserBankBalance();
 			setCurrentAccount(user.address);
 			getWalletBalance(user.address);
 		}
-	}, [user]);
+	}, [user, currentAccount]);
 
 	return (
 		<div className='page-container'>
@@ -96,7 +127,7 @@ function User({ user }) {
 					</button>
 				</div>
 
-				{/* //!--------------------------  */}
+				{/*  --------------------------  */}
 
 				<button
 					className='btn py-2 mt-4 bg-red-400 hover:bg-red-600 hover:text-white'

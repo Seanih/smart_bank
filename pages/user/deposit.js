@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import { getSession } from 'next-auth/react';
+import { getSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
 import abi from '../../abi/SmartBankABI.json';
@@ -17,6 +17,8 @@ function Deposit({ user }) {
 	const [depErrorMsg, setDepErrorMsg] = useState('');
 
 	const router = useRouter();
+
+	const numEthInWei = num => ethers.utils.parseEther(num.toString());
 
 	const toggleShowModal = () => setShowDepositModal(!showDepositModal);
 
@@ -33,6 +35,8 @@ function Deposit({ user }) {
 	};
 
 	const depositEth = async () => {
+		console.log('clicked "deposit ETH"');
+
 		try {
 			const { ethereum } = window;
 
@@ -48,7 +52,7 @@ function Deposit({ user }) {
 				console.log('depositing ETH...');
 
 				const depositTxn = await SmartBankContract.depositFunds({
-					value: depositAmt,
+					value: numEthInWei(depositAmt),
 				});
 
 				await depositTxn.wait();
@@ -58,7 +62,7 @@ function Deposit({ user }) {
 				// Clear the deposit field
 				setDepositAmt(0);
 
-				router.push('/txhistory');
+				router.push('/user');
 			}
 		} catch (error) {
 			setShowDepositModal(!showDepositModal);
@@ -138,6 +142,12 @@ function Deposit({ user }) {
 						Make Deposit
 					</button>
 				</div>
+				<button
+					className='btn py-2 mt-4 bg-red-400 hover:bg-red-600 hover:text-white'
+					onClick={() => signOut({ redirect: '/signin' })}
+				>
+					Sign Out
+				</button>
 			</main>
 
 			<DepositModal

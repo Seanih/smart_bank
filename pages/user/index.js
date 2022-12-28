@@ -4,7 +4,6 @@ import { getSession, signOut } from 'next-auth/react';
 import abi from '../../abi/SmartBankABI.json';
 import { ethers } from 'ethers';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 // gets a user prop from getServerSideProps
 function User({ user }) {

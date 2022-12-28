@@ -6,7 +6,9 @@ import { getSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
 import abi from '../../abi/SmartBankABI.json';
+
 import DepositModal from '../../components/DepositModal';
+import LoadingModal from '../../components/LoadingModal';
 
 function Deposit({ user }) {
 	const [currentAccount, setCurrentAccount] = useState('');
@@ -14,13 +16,24 @@ function Deposit({ user }) {
 	const [usdValue, setUsdValue] = useState(0);
 	const [depositAmt, setDepositAmt] = useState(0);
 	const [showDepositModal, setShowDepositModal] = useState(false);
-	const [depErrorMsg, setDepErrorMsg] = useState('');
+	const [showLoadingModal, setShowLoadingModal] = useState(false);
+	const [txError, setTxError] = useState(false);
 
 	const router = useRouter();
 
 	const numEthInWei = num => ethers.utils.parseEther(num.toString());
 
-	const toggleShowModal = () => setShowDepositModal(!showDepositModal);
+	const toggleDepositModal = () => {
+		setTxError(false);
+		setShowLoadingModal(false);
+		console.log('error state: ', txError);
+		setShowDepositModal(!showDepositModal);
+	};
+
+	const toggleLoadingModal = () => {
+		setTxError(false);
+		setShowLoadingModal(!showLoadingModal);
+	};
 
 	// HardHat contract address
 	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
@@ -35,9 +48,11 @@ function Deposit({ user }) {
 	};
 
 	const depositEth = async () => {
-		console.log('clicked "deposit ETH"');
-
+		console.log('error state: ', txError);
+		console.log('loading state: ', showLoadingModal);
 		try {
+			toggleLoadingModal();
+
 			const { ethereum } = window;
 
 			if (ethereum) {
@@ -49,8 +64,6 @@ function Deposit({ user }) {
 					signer
 				);
 
-				console.log('depositing ETH...');
-
 				const depositTxn = await SmartBankContract.depositFunds({
 					value: numEthInWei(depositAmt),
 				});
@@ -59,15 +72,15 @@ function Deposit({ user }) {
 
 				console.log('mined deposit transaction', depositTxn.hash);
 
-				// Clear the deposit field
+				// reset states
 				setDepositAmt(0);
 
 				router.push('/user');
 			}
 		} catch (error) {
-			setShowDepositModal(!showDepositModal);
-			setDepErrorMsg(error.message);
-			console.log(error.message);
+			toggleDepositModal();
+			toggleLoadingModal();
+			setTxError(true);
 		}
 	};
 
@@ -121,24 +134,32 @@ function Deposit({ user }) {
 						{(usdValue * ethBalance).toFixed(2)}
 					</span>
 				</p>
-				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
-				<div className='mb-4'>
+				<div className='my-2'>
 					<label htmlFor='depositAmount'>
 						Deposit ETH Amount:
 						<input
 							type='number'
-							className='bg-white rounded-md ml-2'
+							className='bg-white rounded-md ml-2 border border-black text-center'
 							value={depositAmt}
 							min='0'
 							onChange={e => setDepositAmt(e.target.value)}
 						/>
 					</label>
 				</div>
+				{txError && (
+					<div className='mt-2 border border-red-600 w-[80%]'>
+						<p className='px-4 text-center text-red-900'>
+							An error occured with the transaction; please verify details and
+							try again
+						</p>
+					</div>
+				)}
+				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<div className='grid grid-cols-2 gap-4'>
 					<button className='btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
 						<Link href={'/user'}>Back</Link>
 					</button>
-					<button className='btn' onClick={toggleShowModal}>
+					<button className='btn' onClick={toggleDepositModal}>
 						Make Deposit
 					</button>
 				</div>
@@ -156,8 +177,14 @@ function Deposit({ user }) {
 				usdValue={usdValue}
 				depositAmt={depositAmt}
 				showDepositModal={showDepositModal}
-				toggleShowModal={toggleShowModal}
+				toggleDepositModal={toggleDepositModal}
 				depositEth={depositEth}
+				setTxError={setTxError}
+			/>
+			<LoadingModal
+				txError={txError}
+				showLoadingModal={showLoadingModal}
+				toggleLoadingModal={toggleLoadingModal}
 			/>
 		</div>
 	);

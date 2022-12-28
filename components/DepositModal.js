@@ -3,7 +3,7 @@ function DepositModal({
 	ethBalance,
 	depositAmt,
 	showDepositModal,
-	toggleShowModal,
+	toggleDepositModal,
 	depositEth,
 }) {
 	return (
@@ -17,12 +17,12 @@ function DepositModal({
 			<div
 				className={
 					showDepositModal
-						? 'relative bg-gray-100 text-black h-[50%] w-[50%] flex flex-col justify-center items-center rounded-md top-0 ease-in duration-300'
+						? 'relative bg-gray-100 text-black h-[50%] w-[60%] sm:w-[50%] flex flex-col justify-center items-center rounded-md top-0 ease-in duration-300'
 						: 'top-full duration-300 ease-in'
 				}
 			>
 				<div>
-					<h3 className='font-medium mb-4'>
+					<h3 className='font-medium mb-4 text-center'>
 						Please verify transaction details:
 					</h3>
 					<p>
@@ -65,10 +65,10 @@ function DepositModal({
 					</p>
 				</div>
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
-				<div className='grid grid-cols-2 gap-2'>
+				<div className='grid grid-cols-2 gap-2 px-2'>
 					<button
 						className='btn hover:scale-105 py-1 mt-2 bg-red-400 hover:bg-red-600 hover:text-white'
-						onClick={toggleShowModal}
+						onClick={toggleDepositModal}
 					>
 						Cancel
 					</button>

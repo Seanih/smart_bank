@@ -26,13 +26,7 @@ function Deposit({ user }) {
 	const toggleDepositModal = () => {
 		setTxError(false);
 		setShowLoadingModal(false);
-		console.log('error state: ', txError);
 		setShowDepositModal(!showDepositModal);
-	};
-
-	const toggleLoadingModal = () => {
-		setTxError(false);
-		setShowLoadingModal(!showLoadingModal);
 	};
 
 	// HardHat contract address
@@ -51,7 +45,8 @@ function Deposit({ user }) {
 		console.log('error state: ', txError);
 		console.log('loading state: ', showLoadingModal);
 		try {
-			toggleLoadingModal();
+			setTxError(false);
+			setShowLoadingModal(true);
 
 			const { ethereum } = window;
 
@@ -79,7 +74,6 @@ function Deposit({ user }) {
 			}
 		} catch (error) {
 			toggleDepositModal();
-			toggleLoadingModal();
 			setTxError(true);
 		}
 	};
@@ -181,11 +175,7 @@ function Deposit({ user }) {
 				depositEth={depositEth}
 				setTxError={setTxError}
 			/>
-			<LoadingModal
-				txError={txError}
-				showLoadingModal={showLoadingModal}
-				toggleLoadingModal={toggleLoadingModal}
-			/>
+			<LoadingModal txError={txError} showLoadingModal={showLoadingModal} />
 		</div>
 	);
 }

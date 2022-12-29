@@ -1,11 +1,6 @@
 import { GridLoader } from 'react-spinners';
 
-function LoadingModal({
-	showDepositModal,
-	showLoadingModal,
-	toggleLoadingModal,
-	txError,
-}) {
+function LoadingModal({ showLoadingModal, txError }) {
 	return (
 		<>
 			{!txError && (
@@ -24,10 +19,10 @@ function LoadingModal({
 						}
 					>
 						<p className='text-center px-8 pb-8'>
-							Please wait while your transaction is being processed
+							Please wait while your transaction is being processed; this could
+							take up to 1 minute.
 						</p>
 						<GridLoader color='teal' size={25} />
-						<button onClick={toggleLoadingModal}>close modal</button>
 					</div>
 				</div>
 			)}

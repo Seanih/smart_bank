@@ -77,14 +77,14 @@ function User({ user }) {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
-			<main className='flex flex-col rounded-xl justify-center items-center py-8 w-[80%] md:w-[70%] bg-gray-200 text-black'>
-				<h1 className='mb-4'>
+			<main className='flex flex-col rounded-xl justify-center items-center py-8 w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black'>
+				<h1 className='mb-4 text-center'>
 					Welcome to{' '}
 					<span className='font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-700 via-cyan-600 to-gray-700'>
 						Smart Bank
 					</span>
 				</h1>
-				<h2>
+				<h2 className='text-center'>
 					Connected Wallet:{' '}
 					<span className='text-gray-600 font-bold'>
 						{`${currentAccount.slice(0, 4)}...${currentAccount.slice(
@@ -114,14 +114,14 @@ function User({ user }) {
 				</p>
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<p className='py-5'>Which service would you like to use?</p>
-				<div className='grid grid-cols-3 gap-3'>
-					<button className='btn'>
+				<div className='grid grid-cols-3 gap-1'>
+					<button className='btn py-2'>
 						<Link href={'/user/deposit'}>Deposit</Link>
 					</button>
-					<button className='btn'>
+					<button className='btn py-2'>
 						<Link href={'/user/withdraw'}>Withdraw</Link>
 					</button>
-					<button className='btn'>
+					<button className='btn py-2'>
 						<Link href={'/user/transfer'}>Transfer</Link>
 					</button>
 				</div>

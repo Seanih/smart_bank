@@ -42,8 +42,6 @@ function Deposit({ user }) {
 	};
 
 	const depositEth = async () => {
-		console.log('error state: ', txError);
-		console.log('loading state: ', showLoadingModal);
 		try {
 			setTxError(false);
 			setShowLoadingModal(true);
@@ -103,14 +101,14 @@ function Deposit({ user }) {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
-			<main className='flex flex-col rounded-xl justify-center items-center py-8 w-[80%] md:w-[70%] bg-gray-200 text-black'>
-				<h1 className='mb-4 font-semibold'>
+			<main className='flex flex-col rounded-xl justify-center items-center py-8 h-[50%] w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black'>
+				<h1 className='mb-4 font-semibold text-center'>
 					<span className='font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-700 via-cyan-600 to-gray-700'>
 						Smart Bank
 					</span>{' '}
 					Deposit
 				</h1>
-				<h2>
+				<h2 className='text-center'>
 					Connected Wallet:{' '}
 					<span className='text-gray-600 font-bold'>
 						{`${currentAccount.slice(0, 4)}...${currentAccount.slice(
@@ -128,7 +126,7 @@ function Deposit({ user }) {
 						{(usdValue * ethBalance).toFixed(2)}
 					</span>
 				</p>
-				<div className='my-2'>
+				<div className='my-2 text-center'>
 					<label htmlFor='depositAmount'>
 						Deposit ETH Amount:
 						<input
@@ -150,10 +148,10 @@ function Deposit({ user }) {
 				)}
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<div className='grid grid-cols-2 gap-4'>
-					<button className='btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
+					<button className='btn py-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
 						<Link href={'/user'}>Back</Link>
 					</button>
-					<button className='btn' onClick={toggleDepositModal}>
+					<button className='btn py-2' onClick={toggleDepositModal}>
 						Make Deposit
 					</button>
 				</div>

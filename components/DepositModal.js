@@ -17,11 +17,11 @@ function DepositModal({
 			<div
 				className={
 					showDepositModal
-						? 'relative bg-gray-100 text-black h-[50%] w-[60%] sm:w-[50%] flex flex-col justify-center items-center rounded-md top-0 ease-in duration-300'
+						? 'relative bg-gray-100 text-black h-[50%] w-[75%] sm:w-[50%] flex flex-col justify-center items-center rounded-md top-0 ease-in duration-300'
 						: 'top-full duration-300 ease-in'
 				}
 			>
-				<div>
+				<div className="px-1">
 					<h3 className='font-medium mb-4 text-center'>
 						Please verify transaction details:
 					</h3>

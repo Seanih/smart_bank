@@ -26,7 +26,7 @@
 	}
 
 	.page-container {
-		@apply h-screen w-full flex flex-col justify-center items-center bg-gradient-to-br;
+		@apply h-screen w-full max-w-screen-2xl flex flex-col justify-center items-center bg-gradient-to-br m-auto;
 	}
 }
 

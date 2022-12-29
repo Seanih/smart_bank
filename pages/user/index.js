@@ -114,7 +114,7 @@ function User({ user }) {
 				</p>
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<p className='py-5'>Which service would you like to use?</p>
-				<div className='grid grid-cols-3 gap-1'>
+				<div className='grid grid-cols-3 gap-1 sm:gap-3'>
 					<button className='btn py-2'>
 						<Link href={'/user/deposit'}>Deposit</Link>
 					</button>

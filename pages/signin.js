@@ -62,7 +62,9 @@ function SignIn() {
 						Smart Bank
 					</span>
 				</h1>
-				<h3 className='text-center'>Choose the wallet you would like to connect with:</h3>
+				<h3 className='text-center'>
+					Choose the wallet you would like to connect with:
+				</h3>
 
 				<div className='grid grid-cols-2 gap-2 px-2'>
 					<button
@@ -70,7 +72,7 @@ function SignIn() {
 						onClick={handleMetaAuth}
 					>
 						<div className='grid grid-cols-2 items-center gap-1'>
-							<span>Metamask</span>
+							<span className='text-sm sm:text-base'>Metamask</span>
 							<Image src={metamask} alt='metamask logo' width={60} />
 						</div>
 					</button>
@@ -79,7 +81,7 @@ function SignIn() {
 						onClick={handleMetaAuth}
 					>
 						<div className='grid grid-cols-2 items-center gap-1'>
-							<span>Coinbase</span>
+							<span className='text-sm sm:text-base'>Coinbase</span>
 							<Image src={coinbase} alt='coinbase logo' width={60} />
 						</div>
 					</button>

@@ -3,8 +3,9 @@ import Image from 'next/image';
 
 import metamask from '../public/metamask.png';
 import coinbase from '../public/coinbase.png';
-
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
+
 import { signIn } from 'next-auth/react';
 import { useAccount, useConnect, useSignMessage, useDisconnect } from 'wagmi';
 import { useRouter } from 'next/router';
@@ -31,6 +32,39 @@ function SignIn() {
 			address: account,
 			chainId: chain.id,
 		});
+
+		const signature = await signMessageAsync({ message });
+
+		// redirect user after success authentication to '/user' page
+		const { url } = await signIn('moralis-auth', {
+			message,
+			signature,
+			redirect: false,
+			callbackUrl: '/user',
+		});
+		/**
+		 * instead of using signIn(..., redirect: "/user")
+		 * we get the url from callback and push it to the router to avoid page refreshing
+		 */
+		push(url);
+	};
+
+	const handleCoinbaseAuth = async () => {
+		if (isConnected) {
+			await disconnectAsync();
+		}
+
+		const { account, chain } = await connectAsync({
+			connector: new CoinbaseWalletConnector({
+				options: {
+					appName: 'Smart Bank',
+				},
+			}),
+		});
+
+		const userData = { address: account, chain: chain.id, network: 'evm' };
+
+		const { message } = await requestChallengeAsync(userData);
 
 		const signature = await signMessageAsync({ message });
 
@@ -78,7 +112,7 @@ function SignIn() {
 					</button>
 					<button
 						className='btn p-2 mt-5 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
-						onClick={handleMetaAuth}
+						onClick={handleCoinbaseAuth}
 					>
 						<div className='grid grid-cols-2 items-center gap-1'>
 							<span className='text-sm sm:text-base'>Coinbase</span>

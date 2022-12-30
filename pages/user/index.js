@@ -14,6 +14,11 @@ function User({ user }) {
 
 	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
 
+	// Import environment variables for Coinbase Wallet
+	const baseUrl = process.env.NODE_ENDPOINT;
+	const username = process.env.NODE_USERNAME;
+	const password = process.env.NODE_PASSWORD;
+
 	const weiToEth = num => ethers.utils.formatEther(num);
 
 	const getEthInUsd = async () => {
@@ -27,7 +32,13 @@ function User({ user }) {
 
 	useEffect(() => {
 		async function getWalletBalance(address) {
-			const provider = new ethers.providers.Web3Provider(window.ethereum);
+			const provider =
+				new ethers.providers.Web3Provider(window.ethereum) ||
+				new ethers.providers.JsonRpcProvider({
+					url: baseUrl,
+					user: username,
+					password: password,
+				});
 			const balance = await provider.getBalance(address);
 			const balanceInEth = ethers.utils.formatEther(balance);
 			const valueInUsd = await getEthInUsd();
@@ -37,37 +48,35 @@ function User({ user }) {
 		}
 
 		const getUserBankBalance = async () => {
-			console.log('getting user balance');
-
 			try {
-				const { ethereum } = window;
+				const provider =
+					new ethers.providers.Web3Provider(window.ethereum) ||
+					new ethers.providers.JsonRpcProvider({
+						url: baseUrl,
+						user: username,
+						password: password,
+					});
+				const signer = provider.getSigner();
+				const SmartBankContract = new ethers.Contract(
+					bankContractAddress,
+					abi,
+					signer
+				);
 
-				if (ethereum) {
-					const provider = new ethers.providers.Web3Provider(ethereum, 'any');
-					const signer = provider.getSigner();
-					const SmartBankContract = new ethers.Contract(
-						bankContractAddress,
-						abi,
-						signer
-					);
+				const userBankBalance = await SmartBankContract.customerBalances(
+					currentAccount
+				);
 
-					const userBankBalance = await SmartBankContract.customerBalances(
-						currentAccount
-					);
-
-					setDepositedBalance(Number(weiToEth(userBankBalance)));
-				}
+				setDepositedBalance(Number(weiToEth(userBankBalance)));
 			} catch (error) {
 				console.log(error.message);
 			}
 		};
 
-		if (user) {
-			getUserBankBalance();
-			setCurrentAccount(user.address);
-			getWalletBalance(user.address);
-		}
-	}, [user, currentAccount]);
+		getUserBankBalance();
+		setCurrentAccount(user.address);
+		getWalletBalance(user.address);
+	}, [user, currentAccount, baseUrl, username, password]);
 
 	return (
 		<div className='page-container'>

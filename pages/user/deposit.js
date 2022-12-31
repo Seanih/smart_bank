@@ -19,6 +19,11 @@ function Deposit({ user }) {
 	const [showLoadingModal, setShowLoadingModal] = useState(false);
 	const [txError, setTxError] = useState(false);
 
+	// Import environment variables for Coinbase Wallet
+	const baseUrl = process.env.NODE_ENDPOINT;
+	const username = process.env.NODE_USERNAME;
+	const password = process.env.NODE_PASSWORD;
+
 	const router = useRouter();
 
 	const numEthInWei = num => ethers.utils.parseEther(num.toString());
@@ -29,7 +34,7 @@ function Deposit({ user }) {
 		setShowDepositModal(!showDepositModal);
 	};
 
-	// HardHat contract address
+	// GOERLI contract address
 	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
 
 	const getEthInUsd = async () => {
@@ -46,30 +51,33 @@ function Deposit({ user }) {
 			setTxError(false);
 			setShowLoadingModal(true);
 
-			const { ethereum } = window;
-
-			if (ethereum) {
-				const provider = new ethers.providers.Web3Provider(ethereum, 'any');
-				const signer = provider.getSigner();
-				const SmartBankContract = new ethers.Contract(
-					bankContractAddress,
-					abi,
-					signer
-				);
-
-				const depositTxn = await SmartBankContract.depositFunds({
-					value: numEthInWei(depositAmt),
+			let provider;
+			if (window.ethereum.isMetaMask) {
+				provider = new ethers.providers.Web3Provider(window.ethereum);
+			} else if (window.ethereum.isCoinbaseWallet) {
+				provider = new ethers.providers.JsonRpcProvider({
+					url: baseUrl,
+					user: username,
+					password: password,
 				});
-
-				await depositTxn.wait();
-
-				console.log('mined deposit transaction', depositTxn.hash);
-
-				// reset states
-				setDepositAmt(0);
-
-				router.push('/user');
 			}
+			const signer = provider.getSigner();
+			const SmartBankContract = new ethers.Contract(
+				bankContractAddress,
+				abi,
+				signer
+			);
+
+			const depositTxn = await SmartBankContract.depositFunds({
+				value: numEthInWei(depositAmt),
+			});
+
+			await depositTxn.wait();
+
+			// reset states
+			setDepositAmt(0);
+
+			router.push('/user');
 		} catch (error) {
 			toggleDepositModal();
 			setTxError(true);
@@ -78,7 +86,16 @@ function Deposit({ user }) {
 
 	useEffect(() => {
 		async function getWalletBalance(address) {
-			const provider = new ethers.providers.Web3Provider(window.ethereum);
+			let provider;
+			if (window.ethereum.isMetaMask) {
+				provider = new ethers.providers.Web3Provider(window.ethereum);
+			} else if (window.ethereum.isCoinbaseWallet) {
+				provider = new ethers.providers.JsonRpcProvider({
+					url: baseUrl,
+					user: username,
+					password: password,
+				});
+			}
 			const balance = await provider.getBalance(address);
 			const balanceInEth = ethers.utils.formatEther(balance);
 			const valueInUsd = await getEthInUsd();
@@ -87,11 +104,9 @@ function Deposit({ user }) {
 			setUsdValue(valueInUsd);
 		}
 
-		if (user) {
-			setCurrentAccount(user.address);
-			getWalletBalance(user.address);
-		}
-	}, [user]);
+		setCurrentAccount(user.address);
+		getWalletBalance(user.address);
+	}, [user, baseUrl, password, username]);
 
 	return (
 		<div className='page-container relative'>
@@ -101,7 +116,7 @@ function Deposit({ user }) {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
-			<main className='flex flex-col rounded-xl justify-center items-center py-8 h-[50%] w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black'>
+			<main className='flex flex-col rounded-xl justify-center items-center py-8 w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black'>
 				<h1 className='mb-4 font-semibold text-center'>
 					<span className='font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-700 via-cyan-600 to-gray-700'>
 						Smart Bank
@@ -141,8 +156,8 @@ function Deposit({ user }) {
 				{txError && (
 					<div className='mt-2 border border-red-600 w-[80%]'>
 						<p className='px-4 text-center text-red-900'>
-							An error occured with the transaction; please verify details and
-							try again
+							The transaction was canceled or an error occured; please verify
+							details and try again.
 						</p>
 					</div>
 				)}

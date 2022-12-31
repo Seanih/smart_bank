@@ -12,6 +12,7 @@ function User({ user }) {
 	const [usdValue, setUsdValue] = useState(0);
 	const [depositedBalance, setDepositedBalance] = useState(0);
 
+	// GOERLI contract address
 	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
 
 	// Import environment variables for Coinbase Wallet
@@ -32,13 +33,17 @@ function User({ user }) {
 
 	useEffect(() => {
 		async function getWalletBalance(address) {
-			const provider =
-				new ethers.providers.Web3Provider(window.ethereum) ||
-				new ethers.providers.JsonRpcProvider({
+			let provider;
+			if (window.ethereum.isMetaMask) {
+				provider = new ethers.providers.Web3Provider(window.ethereum);
+			} else if (window.ethereum.isCoinbaseWallet) {
+				provider = new ethers.providers.JsonRpcProvider({
 					url: baseUrl,
 					user: username,
 					password: password,
 				});
+			}
+
 			const balance = await provider.getBalance(address);
 			const balanceInEth = ethers.utils.formatEther(balance);
 			const valueInUsd = await getEthInUsd();
@@ -49,13 +54,16 @@ function User({ user }) {
 
 		const getUserBankBalance = async () => {
 			try {
-				const provider =
-					new ethers.providers.Web3Provider(window.ethereum) ||
-					new ethers.providers.JsonRpcProvider({
+				let provider;
+				if (window.ethereum.isMetaMask) {
+					provider = new ethers.providers.Web3Provider(window.ethereum);
+				} else if (window.ethereum.isCoinbaseWallet) {
+					provider = new ethers.providers.JsonRpcProvider({
 						url: baseUrl,
 						user: username,
 						password: password,
 					});
+				}
 				const signer = provider.getSigner();
 				const SmartBankContract = new ethers.Contract(
 					bankContractAddress,

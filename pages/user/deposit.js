@@ -51,16 +51,14 @@ function Deposit({ user }) {
 			setTxError(false);
 			setShowLoadingModal(true);
 
-			let provider;
-			if (window.ethereum.isMetaMask) {
-				provider = new ethers.providers.Web3Provider(window.ethereum);
-			} else if (window.ethereum.isCoinbaseWallet) {
-				provider = new ethers.providers.JsonRpcProvider({
+			const provider =
+				new ethers.providers.Web3Provider(window.ethereum) ||
+				new ethers.providers.JsonRpcProvider({
 					url: baseUrl,
 					user: username,
 					password: password,
 				});
-			}
+
 			const signer = provider.getSigner();
 			const SmartBankContract = new ethers.Contract(
 				bankContractAddress,
@@ -86,22 +84,24 @@ function Deposit({ user }) {
 
 	useEffect(() => {
 		async function getWalletBalance(address) {
-			let provider;
-			if (window.ethereum.isMetaMask) {
-				provider = new ethers.providers.Web3Provider(window.ethereum);
-			} else if (window.ethereum.isCoinbaseWallet) {
-				provider = new ethers.providers.JsonRpcProvider({
-					url: baseUrl,
-					user: username,
-					password: password,
-				});
-			}
-			const balance = await provider.getBalance(address);
-			const balanceInEth = ethers.utils.formatEther(balance);
-			const valueInUsd = await getEthInUsd();
+			try {
+				const provider =
+					new ethers.providers.Web3Provider(window.ethereum) ||
+					new ethers.providers.JsonRpcProvider({
+						url: baseUrl,
+						user: username,
+						password: password,
+					});
 
-			setEthBalance(Number(balanceInEth).toFixed(4));
-			setUsdValue(valueInUsd);
+				const balance = await provider.getBalance(address);
+				const balanceInEth = ethers.utils.formatEther(balance);
+				const valueInUsd = await getEthInUsd();
+
+				setEthBalance(Number(balanceInEth).toFixed(4));
+				setUsdValue(valueInUsd);
+			} catch (error) {
+				console.log(error.message);
+			}
 		}
 
 		setCurrentAccount(user.address);
@@ -167,7 +167,7 @@ function Deposit({ user }) {
 						<Link href={'/user'}>Back</Link>
 					</button>
 					<button className='btn py-2' onClick={toggleDepositModal}>
-						Make Deposit
+						Deposit
 					</button>
 				</div>
 				<button

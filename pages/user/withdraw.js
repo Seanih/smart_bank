@@ -53,16 +53,14 @@ function Withdraw({ user }) {
 			setTxError(false);
 			setShowLoadingModal(true);
 
-			let provider;
-			if (window.ethereum.isMetaMask) {
-				provider = new ethers.providers.Web3Provider(window.ethereum);
-			} else if (window.ethereum.isCoinbaseWallet) {
-				provider = new ethers.providers.JsonRpcProvider({
+			const provider =
+				new ethers.providers.Web3Provider(window.ethereum) ||
+				new ethers.providers.JsonRpcProvider({
 					url: baseUrl,
 					user: username,
 					password: password,
 				});
-			}
+
 			const signer = provider.getSigner();
 			const SmartBankContract = new ethers.Contract(
 				bankContractAddress,
@@ -70,7 +68,6 @@ function Withdraw({ user }) {
 				signer
 			);
 
-			console.log(await provider.getNetwork());
 			const withdrawalTxn = await SmartBankContract.withdrawFunds(
 				numEthInWei(withdrawalAmt)
 			);
@@ -90,36 +87,36 @@ function Withdraw({ user }) {
 
 	useEffect(() => {
 		async function getWalletBalance(address) {
-			let provider;
-			if (window.ethereum.isMetaMask) {
-				provider = new ethers.providers.Web3Provider(window.ethereum);
-			} else if (window.ethereum.isCoinbaseWallet) {
-				provider = new ethers.providers.JsonRpcProvider({
-					url: baseUrl,
-					user: username,
-					password: password,
-				});
-			}
-			const balance = await provider.getBalance(address);
-			const balanceInEth = ethers.utils.formatEther(balance);
-			const valueInUsd = await getEthInUsd();
-
-			setEthBalance(Number(balanceInEth).toFixed(4));
-			setUsdValue(valueInUsd);
-		}
-
-		const getUserBankBalance = async () => {
 			try {
-				let provider;
-				if (window.ethereum.isMetaMask) {
-					provider = new ethers.providers.Web3Provider(window.ethereum);
-				} else if (window.ethereum.isCoinbaseWallet) {
-					provider = new ethers.providers.JsonRpcProvider({
+				const provider =
+					new ethers.providers.Web3Provider(window.ethereum) ||
+					new ethers.providers.JsonRpcProvider({
 						url: baseUrl,
 						user: username,
 						password: password,
 					});
-				}
+
+				const balance = await provider.getBalance(address);
+				const balanceInEth = ethers.utils.formatEther(balance);
+				const valueInUsd = await getEthInUsd();
+
+				setEthBalance(Number(balanceInEth).toFixed(4));
+				setUsdValue(valueInUsd);
+			} catch (error) {
+				console.log(error.message);
+			}
+		}
+
+		const getUserBankBalance = async () => {
+			try {
+				const provider =
+					new ethers.providers.Web3Provider(window.ethereum) ||
+					new ethers.providers.JsonRpcProvider({
+						url: baseUrl,
+						user: username,
+						password: password,
+					});
+
 				const signer = provider.getSigner();
 				const SmartBankContract = new ethers.Contract(
 					bankContractAddress,
@@ -155,7 +152,7 @@ function Withdraw({ user }) {
 					<span className='font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-700 via-cyan-600 to-gray-700'>
 						Smart Bank
 					</span>{' '}
-					Deposit
+					Withdraw
 				</h1>
 				<h2 className='text-center'>
 					Connected Wallet:{' '}

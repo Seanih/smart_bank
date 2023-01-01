@@ -33,37 +33,36 @@ function User({ user }) {
 
 	useEffect(() => {
 		async function getWalletBalance(address) {
-			let provider;
-			if (window.ethereum.isMetaMask) {
-				provider = new ethers.providers.Web3Provider(window.ethereum);
-			} else if (window.ethereum.isCoinbaseWallet) {
-				provider = new ethers.providers.JsonRpcProvider({
-					url: baseUrl,
-					user: username,
-					password: password,
-				});
-			}
-
-			const balance = await provider.getBalance(address);
-			const balanceInEth = ethers.utils.formatEther(balance);
-			const valueInUsd = await getEthInUsd();
-
-			setEthBalance(Number(balanceInEth).toFixed(4));
-			setUsdValue(valueInUsd);
-		}
-
-		const getUserBankBalance = async () => {
 			try {
-				let provider;
-				if (window.ethereum.isMetaMask) {
-					provider = new ethers.providers.Web3Provider(window.ethereum);
-				} else if (window.ethereum.isCoinbaseWallet) {
-					provider = new ethers.providers.JsonRpcProvider({
+				const provider =
+					new ethers.providers.Web3Provider(window.ethereum) ||
+					new ethers.providers.JsonRpcProvider({
 						url: baseUrl,
 						user: username,
 						password: password,
 					});
-				}
+
+				const balance = await provider.getBalance(address);
+				const balanceInEth = ethers.utils.formatEther(balance);
+				const valueInUsd = await getEthInUsd();
+
+				setEthBalance(Number(balanceInEth).toFixed(4));
+				setUsdValue(valueInUsd);
+			} catch (error) {
+				console.log(error.message);
+			}
+		}
+
+		const getUserBankBalance = async () => {
+			try {
+				const provider =
+					new ethers.providers.Web3Provider(window.ethereum) ||
+					new ethers.providers.JsonRpcProvider({
+						url: baseUrl,
+						user: username,
+						password: password,
+					});
+					
 				const signer = provider.getSigner();
 				const SmartBankContract = new ethers.Contract(
 					bankContractAddress,

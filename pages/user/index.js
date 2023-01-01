@@ -1,9 +1,10 @@
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getSession, signOut } from 'next-auth/react';
 import abi from '../../abi/SmartBankABI.json';
 import { ethers } from 'ethers';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 // gets a user prop from getServerSideProps
 function User({ user }) {
@@ -31,17 +32,36 @@ function User({ user }) {
 		return exchangeRate;
 	};
 
+	const router = useRouter();
+
+	const handleCompareAddresses = useCallback(async () => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
+		let signer = provider.getSigner();
+		let address = await signer.getAddress();
+
+		if (address !== user.address) {
+			router.push('/signin');
+		}
+	}, [baseUrl, username, password, user.address, router]);
+
 	useEffect(() => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
 		async function getWalletBalance(address) {
 			try {
-				const provider =
-					new ethers.providers.Web3Provider(window.ethereum) ||
-					new ethers.providers.JsonRpcProvider({
-						url: baseUrl,
-						user: username,
-						password: password,
-					});
-
 				const balance = await provider.getBalance(address);
 				const balanceInEth = ethers.utils.formatEther(balance);
 				const valueInUsd = await getEthInUsd();
@@ -55,14 +75,6 @@ function User({ user }) {
 
 		const getUserBankBalance = async () => {
 			try {
-				const provider =
-					new ethers.providers.Web3Provider(window.ethereum) ||
-					new ethers.providers.JsonRpcProvider({
-						url: baseUrl,
-						user: username,
-						password: password,
-					});
-					
 				const signer = provider.getSigner();
 				const SmartBankContract = new ethers.Contract(
 					bankContractAddress,
@@ -80,10 +92,18 @@ function User({ user }) {
 			}
 		};
 
+		handleCompareAddresses();
 		getUserBankBalance();
 		setCurrentAccount(user.address);
 		getWalletBalance(user.address);
-	}, [user, currentAccount, baseUrl, username, password]);
+	}, [
+		user,
+		currentAccount,
+		baseUrl,
+		username,
+		password,
+		handleCompareAddresses,
+	]);
 
 	return (
 		<div className='page-container'>

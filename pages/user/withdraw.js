@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { getSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -30,14 +30,14 @@ function Withdraw({ user }) {
 	const numEthInWei = num => ethers.utils.parseEther(num.toString());
 	const weiToEth = num => ethers.utils.formatEther(num.toString());
 
+	// GOERLI contract address
+	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
+
 	const toggleWithdrawalModal = () => {
 		setTxError(false);
 		setShowLoadingModal(false);
 		setShowWithdrawalModal(!showWithdrawalModal);
 	};
-
-	// GOERLI contract address
-	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
 
 	const getEthInUsd = async () => {
 		const response = await fetch(
@@ -47,6 +47,23 @@ function Withdraw({ user }) {
 		const exchangeRate = data.USD;
 		return exchangeRate;
 	};
+
+	const handleCompareAddresses = useCallback(async () => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
+		let signer = provider.getSigner();
+		let address = await signer.getAddress();
+
+		if (address !== user.address) {
+			router.push('/signin');
+		}
+	}, [user.address, baseUrl, username, password, router]);
 
 	const withdrawEth = async () => {
 		try {
@@ -86,16 +103,16 @@ function Withdraw({ user }) {
 	};
 
 	useEffect(() => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
 		async function getWalletBalance(address) {
 			try {
-				const provider =
-					new ethers.providers.Web3Provider(window.ethereum) ||
-					new ethers.providers.JsonRpcProvider({
-						url: baseUrl,
-						user: username,
-						password: password,
-					});
-
 				const balance = await provider.getBalance(address);
 				const balanceInEth = ethers.utils.formatEther(balance);
 				const valueInUsd = await getEthInUsd();
@@ -109,14 +126,6 @@ function Withdraw({ user }) {
 
 		const getUserBankBalance = async () => {
 			try {
-				const provider =
-					new ethers.providers.Web3Provider(window.ethereum) ||
-					new ethers.providers.JsonRpcProvider({
-						url: baseUrl,
-						user: username,
-						password: password,
-					});
-
 				const signer = provider.getSigner();
 				const SmartBankContract = new ethers.Contract(
 					bankContractAddress,
@@ -134,10 +143,18 @@ function Withdraw({ user }) {
 			}
 		};
 
+		handleCompareAddresses();
 		getUserBankBalance();
 		setCurrentAccount(user.address);
 		getWalletBalance(user.address);
-	}, [user, currentAccount, baseUrl, username, password]);
+	}, [
+		user,
+		currentAccount,
+		baseUrl,
+		username,
+		password,
+		handleCompareAddresses,
+	]);
 
 	return (
 		<div className='page-container'>

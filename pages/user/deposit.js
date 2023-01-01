@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { getSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -45,6 +45,23 @@ function Deposit({ user }) {
 		const exchangeRate = data.USD;
 		return exchangeRate;
 	};
+
+	const handleCompareAddresses = useCallback(async () => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
+		let signer = provider.getSigner();
+		let address = await signer.getAddress();
+
+		if (address !== user.address) {
+			router.push('/signin');
+		}
+	}, [baseUrl, username, password, user.address, router]);
 
 	const depositEth = async () => {
 		try {
@@ -104,9 +121,10 @@ function Deposit({ user }) {
 			}
 		}
 
+		handleCompareAddresses();
 		setCurrentAccount(user.address);
 		getWalletBalance(user.address);
-	}, [user, baseUrl, password, username]);
+	}, [user, baseUrl, password, username, handleCompareAddresses]);
 
 	return (
 		<div className='page-container relative'>

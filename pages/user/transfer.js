@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { getSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -21,6 +21,7 @@ function Transfer({ user }) {
 	const [showLoadingModal, setShowLoadingModal] = useState(false);
 	const [txError, setTxError] = useState(false);
 	const [addressError, setAddressError] = useState(false);
+	const [validAddress, setValidAddress] = useState(false);
 
 	// Import environment variables for Coinbase Wallet
 	const baseUrl = process.env.NODE_ENDPOINT;
@@ -52,18 +53,38 @@ function Transfer({ user }) {
 
 	const validateAddress = address => {
 		if (!addressError && !toAddress) {
+			setValidAddress(false);
 			setAddressError(false);
 		} else if (
 			address[0] == '0' &&
 			address[1] == 'x' &&
 			toAddress.length === 42
 		) {
+			setValidAddress(true);
 			setAddressError(false);
 		} else {
+			setValidAddress(false);
 			setShowTransferModal(false);
 			setAddressError(true);
 		}
 	};
+
+	const handleCompareAddresses = useCallback(async () => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
+		let signer = provider.getSigner();
+		let address = await signer.getAddress();
+
+		if (address !== user.address) {
+			router.push('/signin');
+		}
+	}, [user.address, baseUrl, username, password, router]);
 
 	const transferEth = async () => {
 		try {
@@ -105,16 +126,16 @@ function Transfer({ user }) {
 	};
 
 	useEffect(() => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
 		async function getWalletBalance(address) {
 			try {
-				const provider =
-					new ethers.providers.Web3Provider(window.ethereum) ||
-					new ethers.providers.JsonRpcProvider({
-						url: baseUrl,
-						user: username,
-						password: password,
-					});
-
 				const balance = await provider.getBalance(address);
 				const balanceInEth = ethers.utils.formatEther(balance);
 				const valueInUsd = await getEthInUsd();
@@ -128,14 +149,6 @@ function Transfer({ user }) {
 
 		const getUserBankBalance = async () => {
 			try {
-				const provider =
-					new ethers.providers.Web3Provider(window.ethereum) ||
-					new ethers.providers.JsonRpcProvider({
-						url: baseUrl,
-						user: username,
-						password: password,
-					});
-
 				const signer = provider.getSigner();
 				const SmartBankContract = new ethers.Contract(
 					bankContractAddress,
@@ -153,10 +166,18 @@ function Transfer({ user }) {
 			}
 		};
 
+		handleCompareAddresses();
 		getUserBankBalance();
 		setCurrentAccount(user.address);
 		getWalletBalance(user.address);
-	}, [user, currentAccount, baseUrl, username, password]);
+	}, [
+		user,
+		currentAccount,
+		baseUrl,
+		username,
+		password,
+		handleCompareAddresses,
+	]);
 
 	return (
 		<div className='page-container'>
@@ -211,7 +232,7 @@ function Transfer({ user }) {
 									addressError
 										? 'border-red-600'
 										: !addressError && toAddress.length === 42
-										? 'border-green-500'
+										? 'border-green-500 border-2'
 										: !addressError && !toAddress
 										? 'border-black'
 										: null
@@ -228,11 +249,15 @@ function Transfer({ user }) {
 								onBlur={() => validateAddress(toAddress)}
 							/>
 						</label>
-						{addressError && (
-							<span className='relative pl-2 text-red-600 text-sm'>
-								invalid address
-							</span>
-						)}
+						{addressError ? (
+							<p className='relative -top-3 pl-10 sm:pl-14 text-red-600 text-sm sm:text-base pt-1'>
+								invalid address type
+							</p>
+						) : validAddress ? (
+							<p className='relative -top-3 pl-10 sm:pl-12 text-green-700 text-sm sm:text-base pt-1'>
+								valid address type!
+							</p>
+						) : null}
 					</div>
 				</div>
 				{txError && (

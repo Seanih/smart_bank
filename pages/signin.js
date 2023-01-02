@@ -119,7 +119,7 @@ function SignIn() {
 						className='btn p-2 mt-5 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
 						onClick={handleMetaAuth}
 					>
-						<div className='grid grid-cols-2 items-center gap-1'>
+						<div className='flex justify-between items-center'>
 							<span className='text-sm sm:text-base'>Metamask</span>
 							<Image
 								src={metamask}
@@ -133,7 +133,7 @@ function SignIn() {
 						className='btn p-2 mt-5 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
 						onClick={handleCoinbaseAuth}
 					>
-						<div className='grid grid-cols-2 items-center gap-1'>
+						<div className='flex justify-between items-center'>
 							<span className='text-sm sm:text-base'>Coinbase</span>
 							<Image
 								src={coinbase}
@@ -152,7 +152,7 @@ function SignIn() {
 					</div>
 				)}
 				<p className='relative top-8 sm:top-[10%] text-xs sm:text-sm px-4 text-center text-blue-700'>
-					To ensure balance & transaction accuracy, only{' '}
+					To ensure the best experience, only{' '}
 					<span className='font-bold'>one(1)</span> wallet should be connected
 					at a time.{' '}
 					<span className='font-bold underline'>

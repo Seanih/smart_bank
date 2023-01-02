@@ -49,18 +49,22 @@ function Withdraw({ user }) {
 	};
 
 	const handleCompareAddresses = useCallback(async () => {
-		const provider =
-			new ethers.providers.Web3Provider(window.ethereum) ||
-			new ethers.providers.JsonRpcProvider({
-				url: baseUrl,
-				user: username,
-				password: password,
-			});
+		try {
+			const provider =
+				new ethers.providers.Web3Provider(window.ethereum) ||
+				new ethers.providers.JsonRpcProvider({
+					url: baseUrl,
+					user: username,
+					password: password,
+				});
 
-		let signer = provider.getSigner();
-		let address = await signer.getAddress();
+			let signer = provider.getSigner();
+			let address = await signer.getAddress();
 
-		if (address !== user.address) {
+			if (address !== user.address) {
+				router.push('/signin');
+			}
+		} catch (error) {
 			router.push('/signin');
 		}
 	}, [user.address, baseUrl, username, password, router]);
@@ -214,7 +218,13 @@ function Withdraw({ user }) {
 					<button className='btn py-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
 						<Link href={'/user'}>Back</Link>
 					</button>
-					<button className='btn py-2' onClick={toggleWithdrawalModal}>
+					<button
+						className='btn py-2'
+						onClick={() => {
+							handleCompareAddresses();
+							toggleWithdrawalModal();
+						}}
+					>
 						Withdraw
 					</button>
 				</div>

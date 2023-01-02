@@ -18,7 +18,7 @@ function WithdrawalModal({
 			<div
 				className={
 					showTransferModal && !addressError
-						? 'relative bg-gray-100 text-black h-[50%] w-[75%] sm:w-[50%] flex flex-col justify-center items-center rounded-md top-0 ease-in duration-300'
+						? 'relative py-2 text-center bg-gray-100 text-black w-[75%] sm:w-[50%] flex flex-col justify-center items-center rounded-md top-0 ease-in duration-300'
 						: 'top-full duration-300 ease-in'
 				}
 			>

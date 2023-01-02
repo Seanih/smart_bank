@@ -47,21 +47,25 @@ function Deposit({ user }) {
 	};
 
 	const handleCompareAddresses = useCallback(async () => {
-		const provider =
-			new ethers.providers.Web3Provider(window.ethereum) ||
-			new ethers.providers.JsonRpcProvider({
-				url: baseUrl,
-				user: username,
-				password: password,
-			});
+		try {
+			const provider =
+				new ethers.providers.Web3Provider(window.ethereum) ||
+				new ethers.providers.JsonRpcProvider({
+					url: baseUrl,
+					user: username,
+					password: password,
+				});
 
-		let signer = provider.getSigner();
-		let address = await signer.getAddress();
+			let signer = provider.getSigner();
+			let address = await signer.getAddress();
 
-		if (address !== user.address) {
+			if (address !== user.address) {
+				router.push('/signin');
+			}
+		} catch (error) {
 			router.push('/signin');
 		}
-	}, [baseUrl, username, password, user.address, router]);
+	}, [user.address, baseUrl, username, password, router]);
 
 	const depositEth = async () => {
 		try {
@@ -134,14 +138,14 @@ function Deposit({ user }) {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
-			<main className='flex flex-col rounded-xl justify-center items-center py-8 w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black'>
-				<h1 className='mb-4 font-semibold text-center'>
+			<main className='flex flex-col rounded-xl justify-center items-center py-8 w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black text-center'>
+				<h1 className='mb-4 font-semibold'>
 					<span className='font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-700 via-cyan-600 to-gray-700'>
 						Smart Bank
 					</span>{' '}
 					Deposit
 				</h1>
-				<h2 className='text-center'>
+				<h2>
 					Connected Wallet:{' '}
 					<span className='text-gray-600 font-bold'>
 						{`${currentAccount.slice(0, 4)}...${currentAccount.slice(
@@ -159,12 +163,12 @@ function Deposit({ user }) {
 						{(usdValue * ethBalance).toFixed(2)}
 					</span>
 				</p>
-				<div className='my-2 text-center'>
+				<div className='my-2'>
 					<label htmlFor='depositAmount'>
 						Deposit ETH Amount:
 						<input
 							type='number'
-							className='bg-white rounded-md ml-2 border border-black text-center'
+							className='bg-white text-center rounded-md ml-2 border border-black'
 							value={depositAmt}
 							min='0'
 							onChange={e => setDepositAmt(e.target.value)}
@@ -173,7 +177,7 @@ function Deposit({ user }) {
 				</div>
 				{txError && (
 					<div className='mt-2 border border-red-600 w-[80%]'>
-						<p className='px-4 text-center text-red-900'>
+						<p className='px-4 text-red-900'>
 							The transaction was canceled or an error occured; please verify
 							details and try again.
 						</p>
@@ -184,7 +188,13 @@ function Deposit({ user }) {
 					<button className='btn py-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
 						<Link href={'/user'}>Back</Link>
 					</button>
-					<button className='btn py-2' onClick={toggleDepositModal}>
+					<button
+						className='btn py-2'
+						onClick={() => {
+							handleCompareAddresses();
+							toggleDepositModal();
+						}}
+					>
 						Deposit
 					</button>
 				</div>

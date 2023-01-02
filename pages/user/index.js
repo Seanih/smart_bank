@@ -35,21 +35,25 @@ function User({ user }) {
 	const router = useRouter();
 
 	const handleCompareAddresses = useCallback(async () => {
-		const provider =
-			new ethers.providers.Web3Provider(window.ethereum) ||
-			new ethers.providers.JsonRpcProvider({
-				url: baseUrl,
-				user: username,
-				password: password,
-			});
+		try {
+			const provider =
+				new ethers.providers.Web3Provider(window.ethereum) ||
+				new ethers.providers.JsonRpcProvider({
+					url: baseUrl,
+					user: username,
+					password: password,
+				});
 
-		let signer = provider.getSigner();
-		let address = await signer.getAddress();
+			let signer = provider.getSigner();
+			let address = await signer.getAddress();
 
-		if (address !== user.address) {
+			if (address !== user.address) {
+				router.push('/signin');
+			}
+		} catch (error) {
 			router.push('/signin');
 		}
-	}, [baseUrl, username, password, user.address, router]);
+	}, [user.address, baseUrl, username, password, router]);
 
 	useEffect(() => {
 		const provider =
@@ -113,14 +117,14 @@ function User({ user }) {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
-			<main className='flex flex-col rounded-xl justify-center items-center py-8 w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black'>
-				<h1 className='mb-4 text-center'>
+			<main className='flex flex-col rounded-xl justify-center items-center py-8 w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black text-center'>
+				<h1 className='mb-4'>
 					Welcome to{' '}
 					<span className='font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-700 via-cyan-600 to-gray-700'>
 						Smart Bank
 					</span>
 				</h1>
-				<h2 className='text-center'>
+				<h2>
 					Connected Wallet:{' '}
 					<span className='text-gray-600 font-bold'>
 						{`${currentAccount.slice(0, 4)}...${currentAccount.slice(
@@ -150,14 +154,14 @@ function User({ user }) {
 				</p>
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<p className='py-5'>Which service would you like to use?</p>
-				<div className='grid grid-cols-3 gap-1 sm:gap-3'>
-					<button className='btn py-2'>
+				<div className='grid grid-cols-3 gap-1 sm:gap-3 px-1'>
+					<button className='btn py-2 flex justify-center text-sm sm:text-base'>
 						<Link href={'/user/deposit'}>Deposit</Link>
 					</button>
-					<button className='btn py-2'>
+					<button className='btn py-2 flex justify-center text-sm sm:text-base'>
 						<Link href={'/user/withdraw'}>Withdraw</Link>
 					</button>
-					<button className='btn py-2'>
+					<button className='btn py-2 flex justify-center text-sm sm:text-base'>
 						<Link href={'/user/transfer'}>Transfer</Link>
 					</button>
 				</div>

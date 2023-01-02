@@ -119,7 +119,7 @@ function SignIn() {
 						className='btn p-2 mt-5 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
 						onClick={handleMetaAuth}
 					>
-						<div className='flex justify-between items-center'>
+						<div className='flex flex-col xs:flex-row justify-between items-center'>
 							<span className='text-sm sm:text-base'>Metamask</span>
 							<Image
 								src={metamask}
@@ -133,13 +133,14 @@ function SignIn() {
 						className='btn p-2 mt-5 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
 						onClick={handleCoinbaseAuth}
 					>
-						<div className='flex justify-between items-center'>
+						<div className='flex flex-col xs:flex-row justify-between items-center'>
 							<span className='text-sm sm:text-base'>Coinbase</span>
 							<Image
 								src={coinbase}
 								alt='coinbase logo'
 								width={60}
 								height={60}
+								className=''
 							/>
 						</div>
 					</button>

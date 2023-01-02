@@ -70,18 +70,22 @@ function Transfer({ user }) {
 	};
 
 	const handleCompareAddresses = useCallback(async () => {
-		const provider =
-			new ethers.providers.Web3Provider(window.ethereum) ||
-			new ethers.providers.JsonRpcProvider({
-				url: baseUrl,
-				user: username,
-				password: password,
-			});
+		try {
+			const provider =
+				new ethers.providers.Web3Provider(window.ethereum) ||
+				new ethers.providers.JsonRpcProvider({
+					url: baseUrl,
+					user: username,
+					password: password,
+				});
 
-		let signer = provider.getSigner();
-		let address = await signer.getAddress();
+			let signer = provider.getSigner();
+			let address = await signer.getAddress();
 
-		if (address !== user.address) {
+			if (address !== user.address) {
+				router.push('/signin');
+			}
+		} catch (error) {
 			router.push('/signin');
 		}
 	}, [user.address, baseUrl, username, password, router]);
@@ -242,9 +246,7 @@ function Transfer({ user }) {
 								placeholder='paste address here'
 								onChange={e => {
 									setToAddress(e.target.value);
-									if (e.target.value.length > 0) {
-										validateAddress(toAddress);
-									}
+									console.log(toAddress);
 								}}
 								onBlur={() => validateAddress(toAddress)}
 							/>
@@ -254,7 +256,7 @@ function Transfer({ user }) {
 								invalid address type
 							</p>
 						) : validAddress ? (
-							<p className='relative -top-3 pl-10 sm:pl-12 text-green-700 text-sm sm:text-base pt-1'>
+							<p className='relative -top-3 pl-10 sm:pl-14 text-green-700 text-sm sm:text-base pt-1'>
 								valid address type!
 							</p>
 						) : null}
@@ -276,8 +278,11 @@ function Transfer({ user }) {
 					<button
 						className='btn py-2'
 						onClick={() => {
+							handleCompareAddresses();
 							validateAddress(toAddress);
-
+							if (!toAddress) {
+								setAddressError(true);
+							}
 							if (!addressError && toAddress.length === 42) {
 								setShowTransferModal(true);
 							}

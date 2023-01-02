@@ -14,7 +14,7 @@ function LoadingModal({ showLoadingModal, txError }) {
 					<div
 						className={
 							showLoadingModal
-								? 'relative bg-gray-100 text-black h-[50%] w-[50%] flex flex-col justify-center items-center rounded-md top-0 ease-in duration-300'
+								? 'relative bg-gray-100 text-black w-[50%] flex flex-col justify-center items-center rounded-md top-0 ease-in duration-300'
 								: 'top-full duration-300 ease-in'
 						}
 					>

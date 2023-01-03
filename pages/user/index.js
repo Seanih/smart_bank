@@ -165,9 +165,7 @@ function User({ user }) {
 						<Link href={'/user/transfer'}>Transfer</Link>
 					</button>
 				</div>
-
 				{/*  --------------------------  */}
-
 				<button
 					className='btn py-2 mt-4 bg-red-400 hover:bg-red-600 hover:text-white'
 					onClick={() => signOut({ redirect: '/signin' })}

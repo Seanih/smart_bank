@@ -246,7 +246,6 @@ function Transfer({ user }) {
 								placeholder='paste address here'
 								onChange={e => {
 									setToAddress(e.target.value);
-									console.log(toAddress);
 								}}
 								onBlur={() => validateAddress(toAddress)}
 							/>

@@ -184,7 +184,7 @@ function Deposit({ user }) {
 					</div>
 				)}
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
-				<div className='grid grid-cols-2 gap-4'>
+				<div className='grid grid-cols-3 gap-2'>
 					<button className='btn py-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
 						<Link href={'/user'}>Back</Link>
 					</button>
@@ -196,6 +196,9 @@ function Deposit({ user }) {
 						}}
 					>
 						Deposit
+					</button>
+					<button className='btn py-2 hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'>
+						<Link href={'/user/dephistory'}>History</Link>
 					</button>
 				</div>
 				<button

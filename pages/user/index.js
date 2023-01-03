@@ -152,7 +152,7 @@ function User({ user }) {
 						{(usdValue * depositedBalance).toFixed(2)}
 					</span>
 				</p>
-				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
+				<div className='h-[2px] w-[80%] bg-slate-500 mt-4' />
 				<p className='py-5'>Which service would you like to use?</p>
 				<div className='grid grid-cols-3 gap-1 sm:gap-3 px-1'>
 					<button className='btn py-2 flex justify-center text-sm sm:text-base'>

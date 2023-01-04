@@ -155,19 +155,19 @@ function User({ user }) {
 				<div className='h-[2px] w-[80%] bg-slate-500 mt-4' />
 				<p className='py-5'>Which service would you like to use?</p>
 				<div className='grid grid-cols-3 gap-1 sm:gap-3 px-1'>
-					<button className='btn py-2 flex justify-center text-sm sm:text-base'>
+					<button className='btn py-2'>
 						<Link href={'/user/deposit'}>Deposit</Link>
 					</button>
-					<button className='btn py-2 flex justify-center text-sm sm:text-base'>
+					<button className='btn py-2'>
 						<Link href={'/user/withdraw'}>Withdraw</Link>
 					</button>
-					<button className='btn py-2 flex justify-center text-sm sm:text-base'>
+					<button className='btn py-2'>
 						<Link href={'/user/transfer'}>Transfer</Link>
 					</button>
 				</div>
 				{/*  --------------------------  */}
 				<button
-					className='btn py-2 mt-4 bg-red-400 hover:bg-red-600 hover:text-white'
+					className='btn mt-4 bg-red-400 hover:bg-red-600 hover:text-white'
 					onClick={() => signOut({ redirect: '/signin' })}
 				>
 					Sign Out

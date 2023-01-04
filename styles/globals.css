@@ -22,7 +22,7 @@
 
 @layer components {
 	.btn {
-		@apply px-4 font-semibold border-2 border-slate-700 hover:bg-green-700 hover:text-gray-200 hover:scale-110 ease-in duration-100 rounded-lg;
+		@apply text-sm xs:text-base flex justify-center items-center px-4 font-semibold border-2 border-slate-700 hover:bg-green-700 hover:text-gray-200 hover:scale-110 ease-in duration-100 rounded-lg;
 	}
 
 	.page-container {

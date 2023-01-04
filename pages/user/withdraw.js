@@ -214,7 +214,7 @@ function Withdraw({ user }) {
 					</div>
 				)}
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
-				<div className='grid grid-cols-2 gap-4'>
+				<div className='grid grid-cols-3 gap-1 xs:gap-2 px-2 xs:px-0'>
 					<button className='btn py-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
 						<Link href={'/user'}>Back</Link>
 					</button>
@@ -227,9 +227,12 @@ function Withdraw({ user }) {
 					>
 						Withdraw
 					</button>
+					<button className='btn py-2 hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'>
+						<Link href={'/user/drawhistory'}>History</Link>
+					</button>
 				</div>
 				<button
-					className='btn py-2 mt-4 bg-red-400 hover:bg-red-600 hover:text-white'
+					className='btn mt-4 bg-red-400 hover:bg-red-600 hover:text-white'
 					onClick={() => signOut({ redirect: '/signin' })}
 				>
 					Sign Out

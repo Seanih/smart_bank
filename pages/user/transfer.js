@@ -28,6 +28,9 @@ function Transfer({ user }) {
 	const username = process.env.NODE_USERNAME;
 	const password = process.env.NODE_PASSWORD;
 
+	// GOERLI contract address
+	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
+
 	const router = useRouter();
 
 	const numEthInWei = num => ethers.utils.parseEther(num.toString());
@@ -38,9 +41,6 @@ function Transfer({ user }) {
 		setShowLoadingModal(false);
 		setShowTransferModal(!showTransferModal);
 	};
-
-	// GOERLI contract address
-	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
 
 	const getEthInUsd = async () => {
 		const response = await fetch(
@@ -261,6 +261,8 @@ function Transfer({ user }) {
 						) : null}
 					</div>
 				</div>
+
+				{/* ------ tx error notice ------- */}
 				{txError && (
 					<div className='mt-2 border border-red-600 w-[80%]'>
 						<p className='px-4 text-center text-red-900'>
@@ -269,6 +271,8 @@ function Transfer({ user }) {
 						</p>
 					</div>
 				)}
+				{/* ------ tx error notice ------- */}
+
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<div className='grid grid-cols-3 gap-1 xs:gap-2 px-2 xs:px-0'>
 					<button className='btn py-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>

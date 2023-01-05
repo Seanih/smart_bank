@@ -21,7 +21,13 @@ function User({ user }) {
 	const username = process.env.NODE_USERNAME;
 	const password = process.env.NODE_PASSWORD;
 
+	const router = useRouter();
+	
 	const weiToEth = num => ethers.utils.formatEther(num);
+
+	function addCommasToNum(n) {
+		return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	}
 
 	const getEthInUsd = async () => {
 		const response = await fetch(
@@ -31,8 +37,6 @@ function User({ user }) {
 		const exchangeRate = data.USD;
 		return exchangeRate;
 	};
-
-	const router = useRouter();
 
 	const handleCompareAddresses = useCallback(async () => {
 		try {
@@ -139,7 +143,7 @@ function User({ user }) {
 				<p>
 					Wallet USD Value: $
 					<span className='font-bold text-green-700'>
-						{(usdValue * ethBalance).toFixed(2)}
+						{addCommasToNum((usdValue * ethBalance).toFixed(2))}
 					</span>
 				</p>
 				<p className='pt-4'>
@@ -149,7 +153,7 @@ function User({ user }) {
 				<p>
 					Deposited USD Value: $
 					<span className='font-bold text-green-700'>
-						{(usdValue * depositedBalance).toFixed(2)}
+						{addCommasToNum((usdValue * depositedBalance).toFixed(2))}
 					</span>
 				</p>
 				<div className='h-[2px] w-[80%] bg-slate-500 mt-4' />

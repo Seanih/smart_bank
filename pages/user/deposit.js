@@ -24,18 +24,22 @@ function Deposit({ user }) {
 	const username = process.env.NODE_USERNAME;
 	const password = process.env.NODE_PASSWORD;
 
+	// GOERLI contract address
+	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
+
 	const router = useRouter();
 
 	const numEthInWei = num => ethers.utils.parseEther(num.toString());
+
+	function addCommasToNum(n) {
+		return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	}
 
 	const toggleDepositModal = () => {
 		setTxError(false);
 		setShowLoadingModal(false);
 		setShowDepositModal(!showDepositModal);
 	};
-
-	// GOERLI contract address
-	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
 
 	const getEthInUsd = async () => {
 		const response = await fetch(
@@ -160,7 +164,7 @@ function Deposit({ user }) {
 				<p className='pt-2'>
 					Wallet USD Value: $
 					<span className='font-bold text-green-700'>
-						{(usdValue * ethBalance).toFixed(2)}
+						{addCommasToNum((usdValue * ethBalance).toFixed(2))}
 					</span>
 				</p>
 				<div className='my-2'>
@@ -175,6 +179,8 @@ function Deposit({ user }) {
 						/>
 					</label>
 				</div>
+
+				{/* ------ tx error notice ------- */}
 				{txError && (
 					<div className='mt-2 border border-red-600 w-[80%]'>
 						<p className='px-4 text-red-900'>
@@ -183,6 +189,8 @@ function Deposit({ user }) {
 						</p>
 					</div>
 				)}
+				{/* ------ tx error notice ------- */}
+
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<div className='grid grid-cols-3 gap-1 xs:gap-2 px-2 xs:px-0'>
 					<button className='btn py-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
@@ -212,12 +220,10 @@ function Deposit({ user }) {
 			<DepositModal
 				currentAccount={currentAccount}
 				ethBalance={ethBalance}
-				usdValue={usdValue}
 				depositAmt={depositAmt}
 				showDepositModal={showDepositModal}
 				toggleDepositModal={toggleDepositModal}
 				depositEth={depositEth}
-				setTxError={setTxError}
 			/>
 			<LoadingModal txError={txError} showLoadingModal={showLoadingModal} />
 		</div>

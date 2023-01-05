@@ -96,7 +96,7 @@ function DepHistory({ user }) {
 			<main className='flex flex-col rounded-xl justify-center items-center py-8 xs:w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black overflow-auto'>
 				<h2 className='mb-2'>Deposit History</h2>
 				{recentTxs.length > 0 ? (
-					<div className='overflow-auto w-[95%]'>
+					<div className='overflow-auto w-[95%] flex justify-center'>
 						<table>
 							<tbody>
 								<tr>
@@ -105,7 +105,7 @@ function DepHistory({ user }) {
 								</tr>
 								{recentTxs.map((tx, i) => (
 									<tr key={i} className='odd:bg-slate-300'>
-										<td className='border border-black border-spacing-2 pl-1 pr-4'>
+										<td className='border border-black border-spacing-2 px-4 text-center'>
 											{readableEthAmt(tx.args[1])} ETH
 										</td>
 										<td className='border border-black border-spacing-2 text-center px-4 py-1'>
@@ -116,7 +116,9 @@ function DepHistory({ user }) {
 							</tbody>
 						</table>
 					</div>
-				) : null}
+				) : (
+					<h3>No deposits have been made yet</h3>
+				)}
 
 				{/* ---------- button layout for page 1 --------- */}
 				{page === 1 && (

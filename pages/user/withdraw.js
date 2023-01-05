@@ -25,13 +25,17 @@ function Withdraw({ user }) {
 	const username = process.env.NODE_USERNAME;
 	const password = process.env.NODE_PASSWORD;
 
+	// GOERLI contract address
+	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
+
 	const router = useRouter();
 
 	const numEthInWei = num => ethers.utils.parseEther(num.toString());
 	const weiToEth = num => ethers.utils.formatEther(num.toString());
 
-	// GOERLI contract address
-	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
+	function addCommasToNum(n) {
+		return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	}
 
 	const toggleWithdrawalModal = () => {
 		setTxError(false);
@@ -190,7 +194,7 @@ function Withdraw({ user }) {
 				<p className='pt-2'>
 					Deposited USD Value: $
 					<span className='font-bold text-green-700'>
-						{(usdValue * depositedBalance).toFixed(2)}
+						{addCommasToNum((usdValue * depositedBalance).toFixed(2))}
 					</span>
 				</p>
 				<div className='my-2 text-center'>
@@ -205,6 +209,8 @@ function Withdraw({ user }) {
 						/>
 					</label>
 				</div>
+
+				{/* ------ tx error notice ------- */}
 				{txError && (
 					<div className='mt-2 border border-red-600 w-[80%]'>
 						<p className='px-4 text-center text-red-900'>
@@ -213,6 +219,8 @@ function Withdraw({ user }) {
 						</p>
 					</div>
 				)}
+				{/* ------ tx error notice ------- */}
+
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<div className='grid grid-cols-3 gap-1 xs:gap-2 px-2 xs:px-0'>
 					<button className='btn py-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
@@ -242,12 +250,10 @@ function Withdraw({ user }) {
 			<WithdrawalModal
 				currentAccount={currentAccount}
 				ethBalance={ethBalance}
-				usdValue={usdValue}
 				withdrawalAmt={withdrawalAmt}
 				showWithdrawalModal={showWithdrawalModal}
 				toggleWithdrawalModal={toggleWithdrawalModal}
 				withdrawEth={withdrawEth}
-				setTxError={setTxError}
 			/>
 			<LoadingModal txError={txError} showLoadingModal={showLoadingModal} />
 		</div>

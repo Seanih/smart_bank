@@ -54,7 +54,7 @@ function WithdrawalModal({
 						</span>
 					</p>
 					<p>
-						Wallet Balance After Deposit:{' '}
+						Wallet Balance After Withdrawal:{' '}
 						<span
 							className={`font-bold ${
 								ethBalance - withdrawalAmt < 0

@@ -96,7 +96,7 @@ function DrawHistory({ user }) {
 			</Head>
 
 			<main className='flex flex-col rounded-xl justify-center items-center py-8 xs:w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black overflow-auto'>
-				<h2 className='mb-2'>Withdrawal History</h2>
+				<h2 className='mb-2 font-semibold'>Withdrawal History</h2>
 				{recentTxs.length > 0 ? (
 					<div className='overflow-auto w-[95%] flex justify-center'>
 						<table>
@@ -118,7 +118,9 @@ function DrawHistory({ user }) {
 							</tbody>
 						</table>
 					</div>
-				) : null}
+				) : (
+					<h3 className='text-slate-700'>No withdrawals have been made yet</h3>
+				)}
 
 				{/* ---------- button layout for page 1 --------- */}
 				{page === 1 && (
@@ -162,7 +164,7 @@ function DrawHistory({ user }) {
 							</button>
 						</div>
 						<button className='btn mt-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
-							<Link href={'/user/deposit'}>Back</Link>
+							<Link href={'/user/withdraw'}>Back</Link>
 						</button>
 					</>
 				)}

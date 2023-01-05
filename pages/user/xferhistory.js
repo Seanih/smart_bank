@@ -97,7 +97,7 @@ function TransferHistory({ user }) {
 			</Head>
 
 			<main className='flex flex-col rounded-xl justify-center items-center py-8 xs:w-[90%] sm:w-[85%] md:w-[75%] bg-gray-200 text-black'>
-				<h2 className='mb-2'>Transfer History</h2>
+				<h2 className='mb-2 font-semibold'>Transfer History</h2>
 				{recentTxs.length > 0 ? (
 					<div className='overflow-auto w-[95%] flex justify-center '>
 						<table>
@@ -126,13 +126,13 @@ function TransferHistory({ user }) {
 							</tbody>
 						</table>
 					</div>
-				) : null}
+				) : <h3 className='text-slate-700'>No transfers have been made yet</h3>}
 
 				{/* ---------- button layout for page 1 --------- */}
 				{page === 1 && (
 					<div className='pt-4 grid grid-cols-2 gap-2'>
 						<button className='btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
-							<Link href={'/user/withdraw'}>Back</Link>
+							<Link href={'/user/transfer'}>Back</Link>
 						</button>
 						<button
 							className={`btn ${

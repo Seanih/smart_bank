@@ -94,7 +94,7 @@ function DepHistory({ user }) {
 			</Head>
 
 			<main className='flex flex-col rounded-xl justify-center items-center py-8 xs:w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black overflow-auto'>
-				<h2 className='mb-2'>Deposit History</h2>
+				<h2 className='mb-2 font-semibold'>Deposit History</h2>
 				{recentTxs.length > 0 ? (
 					<div className='overflow-auto w-[95%] flex justify-center'>
 						<table>
@@ -117,7 +117,7 @@ function DepHistory({ user }) {
 						</table>
 					</div>
 				) : (
-					<h3>No deposits have been made yet</h3>
+					<h3 className='text-slate-700'>No deposits have been made yet</h3>
 				)}
 
 				{/* ---------- button layout for page 1 --------- */}

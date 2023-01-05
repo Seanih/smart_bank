@@ -22,11 +22,11 @@
 
 @layer components {
 	.btn {
-		@apply text-sm xs:text-base flex justify-center items-center px-4 font-semibold border-2 border-slate-700 hover:bg-green-700 hover:text-gray-200 hover:scale-110 ease-in duration-100 rounded-lg;
+		@apply flex items-center justify-center px-4 text-sm font-semibold duration-100 ease-in border-2 rounded-lg xs:text-base border-slate-700 hover:bg-green-700 hover:text-gray-200 hover:scale-110;
 	}
 
 	.page-container {
-		@apply h-screen w-full max-w-screen-2xl flex flex-col justify-center items-center bg-gradient-to-br m-auto;
+		@apply flex flex-col items-center justify-center w-full h-screen m-auto max-w-screen-2xl bg-gradient-to-br;
 	}
 }
 

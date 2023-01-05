@@ -22,7 +22,7 @@ function WithdrawalModal({
 				}
 			>
 				<div className='px-1'>
-					<h3 className='font-medium mb-4 text-center'>
+					<h3 className='mb-4 font-medium text-center'>
 						Please verify transaction details:
 					</h3>
 					<p>
@@ -69,13 +69,13 @@ function WithdrawalModal({
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<div className='grid grid-cols-2 gap-2 px-2'>
 					<button
-						className='btn hover:scale-105 py-1 mt-2 bg-red-400 hover:bg-red-600 hover:text-white'
+						className='py-1 mt-2 bg-red-400 btn hover:scale-105 hover:bg-red-600 hover:text-white'
 						onClick={toggleWithdrawalModal}
 					>
 						Cancel
 					</button>
 					<button
-						className='btn hover:scale-105 py-1 mt-2 text-center'
+						className='py-1 mt-2 text-center btn hover:scale-105'
 						onClick={withdrawEth}
 					>
 						Confirm Withdrawal

@@ -105,7 +105,7 @@ function SignIn() {
 			</Head>
 
 			<main className='absolute flex flex-col rounded-xl justify-center items-center py-8 md:h-1/2 max-h-[500px] w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black'>
-				<p className='relative -top-6 border-2 border-blue-500 rounded-xl p-2 text-blue-800 font-bold'>
+				<p className='relative p-2 font-bold text-blue-800 border-2 border-blue-500 -top-6 rounded-xl'>
 					Deployed on Goerli testnet
 				</p>
 				<h1 className='mb-4 text-center'>
@@ -119,10 +119,10 @@ function SignIn() {
 				</h3>
 				<div className='grid grid-cols-2 gap-2 px-2'>
 					<button
-						className='btn p-2 mt-5 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
+						className='p-2 mt-5 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
 						onClick={handleMetaAuth}
 					>
-						<div className='flex flex-col xs:flex-row justify-between items-center'>
+						<div className='flex flex-col items-center justify-between xs:flex-row'>
 							<span className='text-sm sm:text-base'>Metamask</span>
 							<Image
 								src={metamask}
@@ -133,10 +133,10 @@ function SignIn() {
 						</div>
 					</button>
 					<button
-						className='btn p-2 mt-5 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
+						className='p-2 mt-5 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
 						onClick={handleCoinbaseAuth}
 					>
-						<div className='flex flex-col xs:flex-row justify-between items-center'>
+						<div className='flex flex-col items-center justify-between xs:flex-row'>
 							<span className='text-sm sm:text-base'>Coinbase</span>
 							<Image
 								src={coinbase}

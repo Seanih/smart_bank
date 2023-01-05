@@ -22,7 +22,7 @@ function User({ user }) {
 	const password = process.env.NODE_PASSWORD;
 
 	const router = useRouter();
-	
+
 	const weiToEth = num => ethers.utils.formatEther(num);
 
 	function addCommasToNum(n) {
@@ -130,7 +130,7 @@ function User({ user }) {
 				</h1>
 				<h2>
 					Connected Wallet:{' '}
-					<span className='text-gray-600 font-bold'>
+					<span className='font-bold text-gray-600'>
 						{`${currentAccount.slice(0, 4)}...${currentAccount.slice(
 							currentAccount.length - 4
 						)}`}
@@ -158,20 +158,20 @@ function User({ user }) {
 				</p>
 				<div className='h-[2px] w-[80%] bg-slate-500 mt-4' />
 				<p className='py-5'>Which service would you like to use?</p>
-				<div className='grid grid-cols-3 gap-1 sm:gap-3 px-1'>
-					<button className='btn py-2'>
+				<div className='grid grid-cols-3 gap-1 px-1 sm:gap-3'>
+					<button className='py-2 btn'>
 						<Link href={'/user/deposit'}>Deposit</Link>
 					</button>
-					<button className='btn py-2'>
+					<button className='py-2 btn'>
 						<Link href={'/user/withdraw'}>Withdraw</Link>
 					</button>
-					<button className='btn py-2'>
+					<button className='py-2 btn'>
 						<Link href={'/user/transfer'}>Transfer</Link>
 					</button>
 				</div>
 				{/*  --------------------------  */}
 				<button
-					className='btn mt-4 bg-red-400 hover:bg-red-600 hover:text-white'
+					className='mt-4 bg-red-400 btn hover:bg-red-600 hover:text-white'
 					onClick={() => signOut({ redirect: '/signin' })}
 				>
 					Sign Out

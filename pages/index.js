@@ -19,7 +19,7 @@ export default function Home() {
 				</h1>
 				<p>Please sign in with a Web3 account to begin using our services</p>
 				<Link href={'/signin'}>
-					<button className='btn py-2 mt-5 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
+					<button className='py-2 mt-5 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
 						Sign In{' '}
 					</button>
 				</Link>

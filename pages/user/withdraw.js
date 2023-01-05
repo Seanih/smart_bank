@@ -181,7 +181,7 @@ function Withdraw({ user }) {
 				</h1>
 				<h2 className='text-center'>
 					Connected Wallet:{' '}
-					<span className='text-gray-600 font-bold'>
+					<span className='font-bold text-gray-600'>
 						{`${currentAccount.slice(0, 4)}...${currentAccount.slice(
 							currentAccount.length - 4
 						)}`}
@@ -202,7 +202,7 @@ function Withdraw({ user }) {
 						Withdraw ETH Amount:
 						<input
 							type='number'
-							className='bg-white rounded-md ml-2 border border-black text-center'
+							className='ml-2 text-center bg-white border border-black rounded-md'
 							value={withdrawalAmt}
 							min='0'
 							onChange={e => setWithdrawalAmt(e.target.value)}
@@ -222,12 +222,12 @@ function Withdraw({ user }) {
 				{/* ------ tx error notice ------- */}
 
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
-				<div className='grid grid-cols-3 gap-1 xs:gap-2 px-2 xs:px-0'>
-					<button className='btn py-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
+				<div className='grid grid-cols-3 gap-1 px-2 xs:gap-2 xs:px-0'>
+					<button className='py-2 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
 						<Link href={'/user'}>Back</Link>
 					</button>
 					<button
-						className='btn py-2'
+						className='py-2 btn'
 						onClick={() => {
 							handleCompareAddresses();
 							toggleWithdrawalModal();
@@ -235,12 +235,12 @@ function Withdraw({ user }) {
 					>
 						Withdraw
 					</button>
-					<button className='btn py-2 hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'>
+					<button className='py-2 btn hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'>
 						<Link href={'/user/drawhistory'}>History</Link>
 					</button>
 				</div>
 				<button
-					className='btn mt-4 bg-red-400 hover:bg-red-600 hover:text-white'
+					className='mt-4 bg-red-400 btn hover:bg-red-600 hover:text-white'
 					onClick={() => signOut({ redirect: '/signin' })}
 				>
 					Sign Out

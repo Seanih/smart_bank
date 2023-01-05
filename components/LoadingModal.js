@@ -18,7 +18,7 @@ function LoadingModal({ showLoadingModal, txError }) {
 								: 'top-full duration-300 ease-in'
 						}
 					>
-						<p className='text-center px-8 pb-8'>
+						<p className='px-8 pb-8 text-center'>
 							Please wait while your transaction is being processed; this could
 							take up to 1 minute.
 						</p>

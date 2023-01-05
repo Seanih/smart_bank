@@ -105,10 +105,10 @@ function DepHistory({ user }) {
 								</tr>
 								{recentTxs.map((tx, i) => (
 									<tr key={i} className='odd:bg-slate-300'>
-										<td className='border border-black border-spacing-2 px-4 text-center'>
+										<td className='px-4 text-center border border-black border-spacing-2'>
 											{readableEthAmt(tx.args[1])} ETH
 										</td>
-										<td className='border border-black border-spacing-2 text-center px-4 py-1'>
+										<td className='px-4 py-1 text-center border border-black border-spacing-2'>
 											{readableTime(tx.args[2])}
 										</td>
 									</tr>
@@ -122,7 +122,7 @@ function DepHistory({ user }) {
 
 				{/* ---------- button layout for page 1 --------- */}
 				{page === 1 && (
-					<div className='pt-4 grid grid-cols-2 gap-2'>
+					<div className='grid grid-cols-2 gap-2 pt-4'>
 						<button className='btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
 							<Link href={'/user/deposit'}>Back</Link>
 						</button>
@@ -142,7 +142,7 @@ function DepHistory({ user }) {
 				{/* ---------- button layout for page 2+ --------- */}
 				{page > 1 && (
 					<>
-						<div className='pt-4 grid grid-cols-2 gap-2'>
+						<div className='grid grid-cols-2 gap-2 pt-4'>
 							<button
 								className='btn hover:bg-gradient-to-bl from-blue-700 via-cyan-600 to-green-700'
 								onClick={() => setPage(page - 1)}
@@ -161,13 +161,13 @@ function DepHistory({ user }) {
 								Next Page
 							</button>
 						</div>
-						<button className='btn mt-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
+						<button className='mt-2 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
 							<Link href={'/user/deposit'}>Back</Link>
 						</button>
 					</>
 				)}
 				<button
-					className='btn mt-4 bg-red-400 hover:bg-red-600 hover:text-white'
+					className='mt-4 bg-red-400 btn hover:bg-red-600 hover:text-white'
 					onClick={() => signOut({ redirect: '/signin' })}
 				>
 					Sign Out

@@ -200,7 +200,7 @@ function Transfer({ user }) {
 				</h1>
 				<h2 className='text-center'>
 					Connected Wallet:{' '}
-					<span className='text-gray-600 font-bold'>
+					<span className='font-bold text-gray-600'>
 						{`${currentAccount.slice(0, 4)}...${currentAccount.slice(
 							currentAccount.length - 4
 						)}`}
@@ -216,12 +216,12 @@ function Transfer({ user }) {
 						{(usdValue * depositedBalance).toFixed(2)}
 					</span>
 				</p>
-				<div className='my-2 text-center flex flex-col'>
+				<div className='flex flex-col my-2 text-center'>
 					<label htmlFor='depositAmount'>
 						Transfer ETH Amount:
 						<input
 							type='number'
-							className='bg-white rounded-md my-2 ml-2 border border-black text-center'
+							className='my-2 ml-2 text-center bg-white border border-black rounded-md'
 							value={transferAmt}
 							min='0'
 							onChange={e => setTransferAmt(e.target.value)}
@@ -251,11 +251,11 @@ function Transfer({ user }) {
 							/>
 						</label>
 						{addressError ? (
-							<p className='relative -top-3 pl-10 sm:pl-14 text-red-600 text-sm sm:text-base pt-1'>
+							<p className='relative pt-1 pl-10 text-sm text-red-600 -top-3 sm:pl-14 sm:text-base'>
 								invalid address type
 							</p>
 						) : validAddress ? (
-							<p className='relative -top-3 pl-10 sm:pl-14 text-green-700 text-sm sm:text-base pt-1'>
+							<p className='relative pt-1 pl-10 text-sm text-green-700 -top-3 sm:pl-14 sm:text-base'>
 								valid address type!
 							</p>
 						) : null}
@@ -274,12 +274,12 @@ function Transfer({ user }) {
 				{/* ------ tx error notice ------- */}
 
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
-				<div className='grid grid-cols-3 gap-1 xs:gap-2 px-2 xs:px-0'>
-					<button className='btn py-2 hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
+				<div className='grid grid-cols-3 gap-1 px-2 xs:gap-2 xs:px-0'>
+					<button className='py-2 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
 						<Link href={'/user'}>Back</Link>
 					</button>
 					<button
-						className='btn py-2'
+						className='py-2 btn'
 						onClick={() => {
 							handleCompareAddresses();
 							validateAddress(toAddress);
@@ -293,12 +293,12 @@ function Transfer({ user }) {
 					>
 						Transfer
 					</button>
-					<button className='btn py-2 hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'>
+					<button className='py-2 btn hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'>
 						<Link href={'/user/xferhistory'}>History</Link>
 					</button>
 				</div>
 				<button
-					className='btn mt-4 bg-red-400 hover:bg-red-600 hover:text-white'
+					className='mt-4 bg-red-400 btn hover:bg-red-600 hover:text-white'
 					onClick={() => signOut({ redirect: '/signin' })}
 				>
 					Sign Out

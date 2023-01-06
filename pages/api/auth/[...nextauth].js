@@ -16,6 +16,7 @@ export default NextAuth({
 		async session({ session, token }) {
 			session.user = token.user;
 
+			// add wallet address to MongoDB
 			try {
 				await connectDB();
 				const MongoUser = await Users.findOne({

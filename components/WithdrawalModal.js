@@ -1,6 +1,7 @@
 function WithdrawalModal({
 	currentAccount,
 	ethBalance,
+	depositedBalance,
 	withdrawalAmt,
 	showWithdrawalModal,
 	toggleWithdrawalModal,
@@ -44,16 +45,6 @@ function WithdrawalModal({
 						</span>
 					</p>
 					<p>
-						Wallet ETH Balance:{' '}
-						<span
-							className={`font-bold ${
-								ethBalance > 0 ? 'text-green-700' : null
-							}`}
-						>
-							{ethBalance}
-						</span>
-					</p>
-					<p>
 						Wallet Balance After Withdrawal:{' '}
 						<span
 							className={`font-bold ${
@@ -63,6 +54,18 @@ function WithdrawalModal({
 							}`}
 						>
 							{(Number(ethBalance) + Number(withdrawalAmt)).toFixed(4)}
+						</span>
+					</p>
+					<p>
+						Deposited Balance After Withdrawal:{' '}
+						<span
+							className={`font-bold ${
+								depositedBalance - withdrawalAmt < 0
+									? 'text-red-600'
+									: 'text-green-700'
+							}`}
+						>
+							{(Number(depositedBalance) - Number(withdrawalAmt)).toFixed(4)}
 						</span>
 					</p>
 				</div>

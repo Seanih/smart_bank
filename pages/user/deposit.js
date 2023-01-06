@@ -18,6 +18,7 @@ function Deposit({ user }) {
 	const [showDepositModal, setShowDepositModal] = useState(false);
 	const [showLoadingModal, setShowLoadingModal] = useState(false);
 	const [txError, setTxError] = useState(false);
+	const [network, setNetwork] = useState(null);
 
 	// Import environment variables for Coinbase Wallet
 	const baseUrl = process.env.NODE_ENDPOINT;
@@ -108,16 +109,16 @@ function Deposit({ user }) {
 	};
 
 	useEffect(() => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
 		async function getWalletBalance(address) {
 			try {
-				const provider =
-					new ethers.providers.Web3Provider(window.ethereum) ||
-					new ethers.providers.JsonRpcProvider({
-						url: baseUrl,
-						user: username,
-						password: password,
-					});
-
 				const balance = await provider.getBalance(address);
 				const balanceInEth = ethers.utils.formatEther(balance);
 				const valueInUsd = await getEthInUsd();
@@ -129,10 +130,45 @@ function Deposit({ user }) {
 			}
 		}
 
+		const getNetwork = async () => {
+			try {
+				const walletNetwork = await provider.getNetwork();
+				setNetwork(walletNetwork.name);
+			} catch (error) {
+				console.log(error.message);
+			}
+		};
+
 		handleCompareAddresses();
+		getNetwork();
 		setCurrentAccount(user.address);
 		getWalletBalance(user.address);
 	}, [user, baseUrl, password, username, handleCompareAddresses]);
+
+	useEffect(() => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
+		const checkNetworkChange = async () => {
+			try {
+				const currentNetwork = await provider.getNetwork();
+				if (currentNetwork.name !== network) {
+					setNetwork(currentNetwork.name);
+					window.location.reload();
+				}
+			} catch (error) {
+				console.error(error.message);
+				window.location.reload();
+			}
+		};
+		const interval = setInterval(checkNetworkChange, 1000);
+		return () => clearInterval(interval);
+	});
 
 	return (
 		<div className='absolute page-container'>

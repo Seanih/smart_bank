@@ -1,6 +1,6 @@
 function WithdrawalModal({
 	toAddress,
-	ethBalance,
+	depositedBalance,
 	transferAmt,
 	showTransferModal,
 	toggleTransferModal,
@@ -48,20 +48,20 @@ function WithdrawalModal({
 						Deposited ETH Balance:{' '}
 						<span
 							className={`font-bold ${
-								ethBalance > 0 ? 'text-green-700' : null
+								depositedBalance > 0 ? 'text-green-700' : null
 							}`}
 						>
-							{ethBalance}
+							{depositedBalance}
 						</span>
 					</p>
 					<p>
 						Deposited Balance After Transfer:{' '}
 						<span
 							className={`font-bold ${
-								ethBalance - transferAmt < 0 ? 'text-red-600' : 'text-green-700'
+								depositedBalance - transferAmt < 0 ? 'text-red-600' : 'text-green-700'
 							}`}
 						>
-							{(Number(ethBalance) - Number(transferAmt)).toFixed(4)}
+							{(Number(depositedBalance) - Number(transferAmt)).toFixed(4)}
 						</span>
 					</p>
 				</div>

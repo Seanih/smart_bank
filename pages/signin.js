@@ -104,7 +104,7 @@ function SignIn() {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
-			<main className='absolute flex flex-col rounded-xl justify-center items-center py-8 md:h-1/2 max-h-[500px] w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black'>
+			<main className='absolute flex flex-col rounded-xl justify-center items-center py-8 h-3/4 max-h-[500px] w-[90%] sm:w-[80%] md:w-[70%] bg-gray-200 text-black'>
 				<p className='relative p-2 font-bold text-blue-800 border-2 border-blue-500 -top-6 rounded-xl'>
 					Deployed on Goerli testnet
 				</p>
@@ -156,7 +156,7 @@ function SignIn() {
 						</p>
 					</div>
 				)}
-				<p className='relative top-8 sm:top-[10%] text-xs sm:text-sm px-4 text-center text-blue-800'>
+				<p className='relative px-4 text-xs text-center text-blue-800 top-8 sm:text-sm'>
 					To ensure the best experience, only{' '}
 					<span className='font-bold'>one(1)</span> wallet should be connected
 					at a time.{' '}

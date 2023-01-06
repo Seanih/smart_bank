@@ -87,7 +87,6 @@ function TransferHistory({ user }) {
 		getTransferEvents();
 	}, [user.address, baseUrl, username, password, handleCompareAddresses]);
 
-	console.log(recentTxs);
 	return (
 		<div className='overflow-auto page-container'>
 			<Head>

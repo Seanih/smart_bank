@@ -12,6 +12,7 @@ function User({ user }) {
 	const [ethBalance, setEthBalance] = useState(0);
 	const [usdValue, setUsdValue] = useState(0);
 	const [depositedBalance, setDepositedBalance] = useState(0);
+	const [network, setNetwork] = useState(null);
 
 	// GOERLI contract address
 	const bankContractAddress = '0x032C3529D23A2dee065CCcDbc93656425530D557';
@@ -100,7 +101,17 @@ function User({ user }) {
 			}
 		};
 
+		const getNetwork = async () => {
+			try {
+				const walletNetwork = await provider.getNetwork();
+				setNetwork(walletNetwork.name);
+			} catch (error) {
+				console.log(error.message);
+			}
+		};
+
 		handleCompareAddresses();
+		getNetwork();
 		getUserBankBalance();
 		setCurrentAccount(user.address);
 		getWalletBalance(user.address);
@@ -110,8 +121,34 @@ function User({ user }) {
 		baseUrl,
 		username,
 		password,
+		network,
 		handleCompareAddresses,
 	]);
+
+	useEffect(() => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
+		const checkNetworkChange = async () => {
+			try {
+				const currentNetwork = await provider.getNetwork();
+				if (currentNetwork.name !== network) {
+					setNetwork(currentNetwork.name);
+					window.location.reload();
+				}
+			} catch (error) {
+				console.error(error.message);
+				window.location.reload();
+			}
+		};
+		const interval = setInterval(checkNetworkChange, 1000);
+		return () => clearInterval(interval);
+	});
 
 	return (
 		<div className='page-container'>

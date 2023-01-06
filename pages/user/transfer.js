@@ -22,6 +22,7 @@ function Transfer({ user }) {
 	const [txError, setTxError] = useState(false);
 	const [addressError, setAddressError] = useState(false);
 	const [validAddress, setValidAddress] = useState(false);
+	const [network, setNetwork] = useState(null);
 
 	// Import environment variables for Coinbase Wallet
 	const baseUrl = process.env.NODE_ENDPOINT;
@@ -170,7 +171,17 @@ function Transfer({ user }) {
 			}
 		};
 
+		const getNetwork = async () => {
+			try {
+				const walletNetwork = await provider.getNetwork();
+				setNetwork(walletNetwork.name);
+			} catch (error) {
+				console.log(error.message);
+			}
+		};
+
 		handleCompareAddresses();
+		getNetwork();
 		getUserBankBalance();
 		setCurrentAccount(user.address);
 		getWalletBalance(user.address);
@@ -182,6 +193,31 @@ function Transfer({ user }) {
 		password,
 		handleCompareAddresses,
 	]);
+
+	useEffect(() => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
+		const checkNetworkChange = async () => {
+			try {
+				const currentNetwork = await provider.getNetwork();
+				if (currentNetwork.name !== network) {
+					setNetwork(currentNetwork.name);
+					window.location.reload();
+				}
+			} catch (error) {
+				console.error(error.message);
+				window.location.reload();
+			}
+		};
+		const interval = setInterval(checkNetworkChange, 1000);
+		return () => clearInterval(interval);
+	});
 
 	return (
 		<div className='page-container'>
@@ -307,7 +343,7 @@ function Transfer({ user }) {
 
 			<TransferModal
 				toAddress={toAddress}
-				ethBalance={ethBalance}
+				depositedBalance={depositedBalance}
 				transferAmt={transferAmt}
 				showTransferModal={showTransferModal}
 				toggleTransferModal={toggleTransferModal}

@@ -19,6 +19,7 @@ function Withdraw({ user }) {
 	const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
 	const [showLoadingModal, setShowLoadingModal] = useState(false);
 	const [txError, setTxError] = useState(false);
+	const [network, setNetwork] = useState(null);
 
 	// Import environment variables for Coinbase Wallet
 	const baseUrl = process.env.NODE_ENDPOINT;
@@ -151,7 +152,17 @@ function Withdraw({ user }) {
 			}
 		};
 
+		const getNetwork = async () => {
+			try {
+				const walletNetwork = await provider.getNetwork();
+				setNetwork(walletNetwork.name);
+			} catch (error) {
+				console.log(error.message);
+			}
+		};
+
 		handleCompareAddresses();
+		getNetwork()
 		getUserBankBalance();
 		setCurrentAccount(user.address);
 		getWalletBalance(user.address);
@@ -163,6 +174,31 @@ function Withdraw({ user }) {
 		password,
 		handleCompareAddresses,
 	]);
+
+	useEffect(() => {
+		const provider =
+			new ethers.providers.Web3Provider(window.ethereum) ||
+			new ethers.providers.JsonRpcProvider({
+				url: baseUrl,
+				user: username,
+				password: password,
+			});
+
+		const checkNetworkChange = async () => {
+			try {
+				const currentNetwork = await provider.getNetwork();
+				if (currentNetwork.name !== network) {
+					setNetwork(currentNetwork.name);
+					window.location.reload();
+				}
+			} catch (error) {
+				console.error(error.message);
+				window.location.reload();
+			}
+		};
+		const interval = setInterval(checkNetworkChange, 1000);
+		return () => clearInterval(interval);
+	});
 
 	return (
 		<div className='page-container'>
@@ -250,6 +286,7 @@ function Withdraw({ user }) {
 			<WithdrawalModal
 				currentAccount={currentAccount}
 				ethBalance={ethBalance}
+				depositedBalance={depositedBalance}
 				withdrawalAmt={withdrawalAmt}
 				showWithdrawalModal={showWithdrawalModal}
 				toggleWithdrawalModal={toggleWithdrawalModal}

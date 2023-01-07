@@ -73,11 +73,11 @@ If you want to deploy the project on your local hardhat node:
 
 #### 2. Hydrate DApp with transaction data (OPTIONAL)
 
-- un-comment the code before the GOERLI Deployment Script in `scripts/deploy.js`
+- un-comment the code before the 'GOERLI Deployment Script' section in `scripts/deploy.js`
 
 #### 3. Deploy the contract
 
-`$ npx hh run --network localhost scripts/deploy.js` in root folder
+in a separate terminal execute: `$ npx hh run --network localhost scripts/deploy.js` in root folder
 
 ### 4. Start front-end
 

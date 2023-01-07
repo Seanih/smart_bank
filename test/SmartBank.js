@@ -25,7 +25,6 @@ describe('Bank Contract', () => {
 			it('deploys contract', async () => {
 				const { SmartBankContract } = await loadFixture(deployContractFixture);
 
-				console.log('goerli pk: ', process.env.GOERLI_DEV_PK)
 				expect(SmartBankContract.address).to.equal(
 					'0x5FbDB2315678afecb367f032d93F642f64180aa3'
 				);
@@ -69,9 +68,9 @@ describe('Bank Contract', () => {
 					[amount, numEthInWei(-0.5)]
 				);
 
-				expect(await SmartBankContract.customerBalances(user1.address)).to.equal(
-					numEthInWei(1)
-				);
+				expect(
+					await SmartBankContract.customerBalances(user1.address)
+				).to.equal(numEthInWei(1));
 			});
 
 			it('reflects balance changes after withdrawals', async () => {
@@ -91,12 +90,14 @@ describe('Bank Contract', () => {
 					[numEthInWei(-0.5), numEthInWei(0.5)]
 				);
 
-				tx = await SmartBankContract.connect(user1).withdrawFunds(numEthInWei(0.3));
+				tx = await SmartBankContract.connect(user1).withdrawFunds(
+					numEthInWei(0.3)
+				);
 				await tx.wait();
 
-				expect(await SmartBankContract.customerBalances(user1.address)).to.equal(
-					numEthInWei(0.2)
-				);
+				expect(
+					await SmartBankContract.customerBalances(user1.address)
+				).to.equal(numEthInWei(0.2));
 			});
 
 			it('reflects balance changes after contract transfers', async () => {
@@ -119,9 +120,9 @@ describe('Bank Contract', () => {
 					[numEthInWei(-1.75), numEthInWei(1.75)]
 				);
 
-				expect(await SmartBankContract.customerBalances(user1.address)).to.equal(
-					numEthInWei(1.25)
-				);
+				expect(
+					await SmartBankContract.customerBalances(user1.address)
+				).to.equal(numEthInWei(1.25));
 			});
 
 			it('updates "allTransactions" after successful transactions', async () => {
@@ -140,10 +141,14 @@ describe('Bank Contract', () => {
 				);
 				await tx.wait();
 
-				tx = await SmartBankContract.connect(user1).withdrawFunds(numEthInWei(0.25));
+				tx = await SmartBankContract.connect(user1).withdrawFunds(
+					numEthInWei(0.25)
+				);
 				await tx.wait();
 
-				expect((await SmartBankContract.showAllTransactions()).length).to.equal(3);
+				expect((await SmartBankContract.showAllTransactions()).length).to.equal(
+					3
+				);
 			});
 		});
 
@@ -216,6 +221,30 @@ describe('Bank Contract', () => {
 
 	describe('Failure', () => {
 		describe('Reject Transactions', () => {
+			it('rejects deposits for "0" ETH', async () => {
+				const { SmartBankContract, user1 } = await loadFixture(
+					deployContractFixture
+				);
+
+				await expect(
+					SmartBankContract.connect(user1).depositFunds({ value: 0 })
+				).to.be.reverted;
+			});
+
+			it('rejects withdrawals for "0" ETH', async () => {
+				const { SmartBankContract, user1 } = await loadFixture(
+					deployContractFixture
+				);
+
+				let tx = await SmartBankContract.connect(user1).depositFunds({
+					value: numEthInWei(2),
+				});
+				await tx.wait();
+
+				await expect(SmartBankContract.connect(user1).withdrawFunds(0)).to.be
+					.reverted;
+			});
+
 			it('rejects withdrawals > deposited balance', async () => {
 				const { SmartBankContract, user1 } = await loadFixture(
 					deployContractFixture
@@ -226,8 +255,24 @@ describe('Bank Contract', () => {
 				});
 				await tx.wait();
 
-				await expect(SmartBankContract.connect(user1).withdrawFunds(numEthInWei(3)))
-					.to.be.reverted;
+				await expect(
+					SmartBankContract.connect(user1).withdrawFunds(numEthInWei(3))
+				).to.be.reverted;
+			});
+
+			it('rejects transfers for "0" ETH', async () => {
+				const { SmartBankContract, user1, user2 } = await loadFixture(
+					deployContractFixture
+				);
+
+				let tx = await SmartBankContract.connect(user1).depositFunds({
+					value: numEthInWei(2),
+				});
+				await tx.wait();
+
+				await expect(
+					SmartBankContract.connect(user1).transferFromBank(user2.address, 0)
+				).to.be.reverted;
 			});
 
 			it('rejects transfers > deposited balance', async () => {
@@ -248,7 +293,7 @@ describe('Bank Contract', () => {
 				).to.be.reverted;
 			});
 
-			it('rejects transfers to "0" accounts', async () => {
+			it('rejects transfers to "0" addresses', async () => {
 				const { SmartBankContract, user1, user2 } = await loadFixture(
 					deployContractFixture
 				);

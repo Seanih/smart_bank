@@ -12,8 +12,9 @@ This project demonstrates how a bank would work as a decentralized application (
 - Hardhat (development environment & unit testing)
 - Next.js / Javascript (building & managing the UI)
 - Tailwind CSS (styling the UI)
+- Moralis API (web3 authentication)
 - Ethers.js (connecting UI to blockchain for interactions)
-- MongoDB (storing all wallet addresses that have accessed the DApp)
+- MongoDB (storing all unique addresses that interact with the DApp)
 - Mongoose (object data modeling)
 - Git (version control)
 

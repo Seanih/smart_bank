@@ -78,3 +78,7 @@ If you want to deploy the project on your local hardhat node:
 #### 3. Deploy the contract
 
 `$ npx hh run --network localhost scripts/deploy.js` in root folder
+
+### 4. Start front-end
+
+`$ npm run dev` in root folder

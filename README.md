@@ -80,6 +80,6 @@ If you want to deploy the project on your local hardhat node:
 
 in a separate terminal execute: `$ npx hh run --network localhost scripts/deploy.js` in root folder
 
-### 4. Start front-end
+#### 4. Start front-end
 
 `$ npm run dev` in root folder

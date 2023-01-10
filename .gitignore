@@ -1,10 +1,7 @@
-node_modules
-.env
-coverage
-coverage.json
 typechain
 typechain-types
-.vscode
+
+/.vscode
 
 #Hardhat files
 cache

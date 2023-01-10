@@ -68,7 +68,7 @@ function Deposit({ user }) {
 				router.push('/signin');
 			}
 		} catch (error) {
-			router.push('/signin');
+			// will error on initial render since the browser won't be detected; no action required
 		}
 	}, [user.address, baseUrl, username, password, router]);
 
@@ -108,6 +108,7 @@ function Deposit({ user }) {
 		}
 	};
 
+	//* hydrate the page
 	useEffect(() => {
 		const provider =
 			new ethers.providers.Web3Provider(window.ethereum) ||
@@ -125,18 +126,14 @@ function Deposit({ user }) {
 
 				setEthBalance(Number(balanceInEth).toFixed(4));
 				setUsdValue(valueInUsd);
-			} catch (error) {
-				console.log(error.message);
-			}
+			} catch (error) {}
 		}
 
 		const getNetwork = async () => {
 			try {
 				const walletNetwork = await provider.getNetwork();
 				setNetwork(walletNetwork.name);
-			} catch (error) {
-				console.log(error.message);
-			}
+			} catch (error) {}
 		};
 
 		handleCompareAddresses();
@@ -145,6 +142,7 @@ function Deposit({ user }) {
 		getWalletBalance(user.address);
 	}, [user, baseUrl, password, username, handleCompareAddresses]);
 
+	//* detect network changes
 	useEffect(() => {
 		const provider =
 			new ethers.providers.Web3Provider(window.ethereum) ||
@@ -229,9 +227,13 @@ function Deposit({ user }) {
 
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<div className='grid grid-cols-3 gap-1 px-2 xs:gap-2 xs:px-0'>
-					<button className='py-2 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
-						<Link href={'/user'}>Back</Link>
-					</button>
+					<Link
+						href={'/user'}
+						className='py-2 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
+					>
+						Back
+					</Link>
+
 					<button
 						className='py-2 btn'
 						onClick={() => {
@@ -241,9 +243,13 @@ function Deposit({ user }) {
 					>
 						Deposit
 					</button>
-					<button className='py-2 btn hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'>
-						<Link href={'/user/dephistory'}>History</Link>
-					</button>
+
+					<Link
+						href={'/user/dephistory'}
+						className='py-2 btn hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'
+					>
+						History
+					</Link>
 				</div>
 				<button
 					className='mt-4 bg-red-400 btn hover:bg-red-600 hover:text-white'

@@ -31,7 +31,6 @@ export default NextAuth({
 					await newUser.save();
 				}
 			} catch (error) {
-				console.log(error.message);
 			}
 
 			return session;

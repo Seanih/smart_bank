@@ -46,7 +46,7 @@ function DrawHistory({ user }) {
 				router.push('/signin');
 			}
 		} catch (error) {
-			router.push('/signin');
+			// will error on initial render since the browser won't be detected; no action required
 		}
 	}, [user.address, baseUrl, username, password, router]);
 
@@ -79,7 +79,7 @@ function DrawHistory({ user }) {
 					withdrawEvents.sort((a, b) => b.blockNumber - a.blockNumber)
 				);
 			} catch (error) {
-				console.log(error.message);
+				// UI will show no withdrawals have been made
 			}
 		};
 
@@ -125,9 +125,13 @@ function DrawHistory({ user }) {
 				{/* ---------- button layout for page 1 --------- */}
 				{page === 1 && (
 					<div className='grid grid-cols-2 gap-2 pt-4'>
-						<button className='btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
-							<Link href={'/user/withdraw'}>Back</Link>
-						</button>
+						<Link
+							href={'/user/withdraw'}
+							className='btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
+						>
+							Back
+						</Link>
+
 						<button
 							className={`btn ${
 								recentTxs.length < pageSize
@@ -163,9 +167,12 @@ function DrawHistory({ user }) {
 								Next Page
 							</button>
 						</div>
-						<button className='mt-2 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
-							<Link href={'/user/withdraw'}>Back</Link>
-						</button>
+						<Link
+							href={'/user/withdraw'}
+							className='btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
+						>
+							Back
+						</Link>
 					</>
 				)}
 				<button

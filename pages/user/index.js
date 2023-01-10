@@ -56,10 +56,11 @@ function User({ user }) {
 				router.push('/signin');
 			}
 		} catch (error) {
-			router.push('/signin');
+			// will error on initial render since the browser won't be detected; no action required
 		}
 	}, [user.address, baseUrl, username, password, router]);
 
+	//* hydrate the page
 	useEffect(() => {
 		const provider =
 			new ethers.providers.Web3Provider(window.ethereum) ||
@@ -77,9 +78,7 @@ function User({ user }) {
 
 				setEthBalance(Number(balanceInEth).toFixed(4));
 				setUsdValue(valueInUsd);
-			} catch (error) {
-				console.log(error.message);
-			}
+			} catch (error) {}
 		}
 
 		const getUserBankBalance = async () => {
@@ -96,18 +95,14 @@ function User({ user }) {
 				);
 
 				setDepositedBalance(Number(weiToEth(userBankBalance)));
-			} catch (error) {
-				console.log(error.message);
-			}
+			} catch (error) {}
 		};
 
 		const getNetwork = async () => {
 			try {
 				const walletNetwork = await provider.getNetwork();
 				setNetwork(walletNetwork.name);
-			} catch (error) {
-				console.log(error.message);
-			}
+			} catch (error) {}
 		};
 
 		handleCompareAddresses();
@@ -125,6 +120,7 @@ function User({ user }) {
 		handleCompareAddresses,
 	]);
 
+	//* detect network changes
 	useEffect(() => {
 		const provider =
 			new ethers.providers.Web3Provider(window.ethereum) ||
@@ -196,15 +192,17 @@ function User({ user }) {
 				<div className='h-[2px] w-[80%] bg-slate-500 mt-4' />
 				<p className='py-5'>Which service would you like to use?</p>
 				<div className='grid grid-cols-3 gap-1 px-1 sm:gap-3'>
-					<button className='py-2 btn'>
-						<Link href={'/user/deposit'}>Deposit</Link>
-					</button>
-					<button className='py-2 btn'>
-						<Link href={'/user/withdraw'}>Withdraw</Link>
-					</button>
-					<button className='py-2 btn'>
-						<Link href={'/user/transfer'}>Transfer</Link>
-					</button>
+					<Link href={'/user/deposit'} className='py-2 btn'>
+						Deposit
+					</Link>
+
+					<Link href={'/user/withdraw'} className='py-2 btn'>
+						Withdraw
+					</Link>
+
+					<Link href={'/user/transfer'} className='py-2 btn'>
+						Transfer
+					</Link>
 				</div>
 				{/*  --------------------------  */}
 				<button

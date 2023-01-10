@@ -12,17 +12,17 @@ import LoadingModal from '../../components/LoadingModal';
 
 function Transfer({ user }) {
 	const [currentAccount, setCurrentAccount] = useState('');
-	const [ethBalance, setEthBalance] = useState(0);
 	const [usdValue, setUsdValue] = useState(0);
 	const [transferAmt, setTransferAmt] = useState(0);
 	const [toAddress, setToAddress] = useState('');
+	const [blankAddress, setBlankAddress] = useState(false);
+	const [validAddress, setValidAddress] = useState(false);
 	const [depositedBalance, setDepositedBalance] = useState(0);
 	const [showTransferModal, setShowTransferModal] = useState(false);
 	const [showLoadingModal, setShowLoadingModal] = useState(false);
+	const [network, setNetwork] = useState(null);
 	const [txError, setTxError] = useState(false);
 	const [addressError, setAddressError] = useState(false);
-	const [validAddress, setValidAddress] = useState(false);
-	const [network, setNetwork] = useState(null);
 
 	// Import environment variables for Coinbase Wallet
 	const baseUrl = process.env.NODE_ENDPOINT;
@@ -49,10 +49,12 @@ function Transfer({ user }) {
 		);
 		const data = await response.json();
 		const exchangeRate = data.USD;
-		return exchangeRate;
+		setUsdValue(exchangeRate);
 	};
 
 	const validateAddress = address => {
+		setBlankAddress(false);
+
 		if (!addressError && !toAddress) {
 			setValidAddress(false);
 			setAddressError(false);
@@ -87,7 +89,7 @@ function Transfer({ user }) {
 				router.push('/signin');
 			}
 		} catch (error) {
-			router.push('/signin');
+			// will error on initial render since the browser won't be detected; no action required
 		}
 	}, [user.address, baseUrl, username, password, router]);
 
@@ -126,10 +128,10 @@ function Transfer({ user }) {
 		} catch (error) {
 			toggleTransferModal();
 			setTxError(true);
-			console.log(error.message);
 		}
 	};
 
+	//* hydrate the page
 	useEffect(() => {
 		const provider =
 			new ethers.providers.Web3Provider(window.ethereum) ||
@@ -138,19 +140,6 @@ function Transfer({ user }) {
 				user: username,
 				password: password,
 			});
-
-		async function getWalletBalance(address) {
-			try {
-				const balance = await provider.getBalance(address);
-				const balanceInEth = ethers.utils.formatEther(balance);
-				const valueInUsd = await getEthInUsd();
-
-				setEthBalance(Number(balanceInEth).toFixed(4));
-				setUsdValue(valueInUsd);
-			} catch (error) {
-				console.log(error.message);
-			}
-		}
 
 		const getUserBankBalance = async () => {
 			try {
@@ -166,25 +155,21 @@ function Transfer({ user }) {
 				);
 
 				setDepositedBalance(Number(weiToEth(userBankBalance)));
-			} catch (error) {
-				console.log(error.message);
-			}
+			} catch (error) {}
 		};
 
 		const getNetwork = async () => {
 			try {
 				const walletNetwork = await provider.getNetwork();
 				setNetwork(walletNetwork.name);
-			} catch (error) {
-				console.log(error.message);
-			}
+			} catch (error) {}
 		};
 
 		handleCompareAddresses();
 		getNetwork();
+		getEthInUsd();
 		getUserBankBalance();
 		setCurrentAccount(user.address);
-		getWalletBalance(user.address);
 	}, [
 		user,
 		currentAccount,
@@ -194,6 +179,7 @@ function Transfer({ user }) {
 		handleCompareAddresses,
 	]);
 
+	//* detect network changes
 	useEffect(() => {
 		const provider =
 			new ethers.providers.Web3Provider(window.ethereum) ||
@@ -286,13 +272,17 @@ function Transfer({ user }) {
 								onBlur={() => validateAddress(toAddress)}
 							/>
 						</label>
-						{addressError ? (
+						{blankAddress ? (
+							<p className='relative pt-1 pl-10 text-sm text-red-600 -top-3 sm:pl-14 sm:text-base'>
+								address can&apos;t be blank
+							</p>
+						) : addressError ? (
 							<p className='relative pt-1 pl-10 text-sm text-red-600 -top-3 sm:pl-14 sm:text-base'>
 								invalid address type
 							</p>
 						) : validAddress ? (
 							<p className='relative pt-1 pl-10 text-sm text-green-700 -top-3 sm:pl-14 sm:text-base'>
-								valid address type!
+								valid address type
 							</p>
 						) : null}
 					</div>
@@ -311,27 +301,37 @@ function Transfer({ user }) {
 
 				<div className='h-[2px] w-[80%] bg-slate-500 my-4' />
 				<div className='grid grid-cols-3 gap-1 px-2 xs:gap-2 xs:px-0'>
-					<button className='py-2 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
-						<Link href={'/user'}>Back</Link>
-					</button>
+					<Link
+						href={'/user'}
+						className='py-2 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
+					>
+						Back
+					</Link>
+
 					<button
 						className='py-2 btn'
 						onClick={() => {
 							handleCompareAddresses();
-							validateAddress(toAddress);
 							if (!toAddress) {
-								setAddressError(true);
+								setBlankAddress(true);
 							}
-							if (!addressError && toAddress.length === 42) {
-								setShowTransferModal(true);
+							if (toAddress) {
+								validateAddress(toAddress);
+								if (!addressError && toAddress.length === 42) {
+									setShowTransferModal(true);
+								}
 							}
 						}}
 					>
 						Transfer
 					</button>
-					<button className='py-2 btn hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'>
-						<Link href={'/user/xferhistory'}>History</Link>
-					</button>
+
+					<Link
+						href={'/user/xferhistory'}
+						className='py-2 btn hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'
+					>
+						History
+					</Link>
 				</div>
 				<button
 					className='mt-4 bg-red-400 btn hover:bg-red-600 hover:text-white'

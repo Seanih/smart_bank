@@ -53,7 +53,6 @@ function SignIn() {
 			push(url);
 		} catch (error) {
 			setLoginError(true);
-			console.log(error.message);
 		}
 	};
 
@@ -92,7 +91,6 @@ function SignIn() {
 			push(url);
 		} catch (error) {
 			setLoginError(true);
-			console.log(error.message);
 		}
 	};
 

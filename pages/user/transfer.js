@@ -303,7 +303,7 @@ function Transfer({ user }) {
 				<div className='grid grid-cols-3 gap-1 px-2 xs:gap-2 xs:px-0'>
 					<Link
 						href={'/user'}
-						className='py-2 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
+						className='py-2 btn underline hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
 					>
 						Back
 					</Link>
@@ -328,7 +328,7 @@ function Transfer({ user }) {
 
 					<Link
 						href={'/user/xferhistory'}
-						className='py-2 btn hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'
+						className='py-2 btn underline hover:bg-gradient-to-br from-green-700 via-cyan-600 to-green-700'
 					>
 						History
 					</Link>

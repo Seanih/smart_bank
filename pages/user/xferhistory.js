@@ -134,7 +134,7 @@ function TransferHistory({ user }) {
 					<div className='grid grid-cols-2 gap-2 pt-4'>
 						<Link
 							href={'/user/transfer'}
-							className='btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
+							className='btn underline hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
 						>
 							Back
 						</Link>
@@ -176,7 +176,7 @@ function TransferHistory({ user }) {
 						</div>
 						<Link
 							href={'/user/transfer'}
-							className='btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
+							className='btn underline hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
 						>
 							Back
 						</Link>

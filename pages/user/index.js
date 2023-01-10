@@ -192,15 +192,15 @@ function User({ user }) {
 				<div className='h-[2px] w-[80%] bg-slate-500 mt-4' />
 				<p className='py-5'>Which service would you like to use?</p>
 				<div className='grid grid-cols-3 gap-1 px-1 sm:gap-3'>
-					<Link href={'/user/deposit'} className='py-2 btn'>
+					<Link href={'/user/deposit'} className='py-2 btn underline'>
 						Deposit
 					</Link>
 
-					<Link href={'/user/withdraw'} className='py-2 btn'>
+					<Link href={'/user/withdraw'} className='py-2 btn underline'>
 						Withdraw
 					</Link>
 
-					<Link href={'/user/transfer'} className='py-2 btn'>
+					<Link href={'/user/transfer'} className='py-2 btn underline'>
 						Transfer
 					</Link>
 				</div>

@@ -18,10 +18,11 @@ export default function Home() {
 					</span>
 				</h1>
 				<p>Please sign in with a Web3 account to begin using our services</p>
-				<Link href={'/signin'}>
-					<button className='py-2 mt-5 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'>
-						Sign In{' '}
-					</button>
+				<Link
+					href={'/signin'}
+					className='py-2 mt-5 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700 underline'
+				>
+					Sign In{' '}
 				</Link>
 			</main>
 		</div>

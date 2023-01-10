@@ -125,7 +125,7 @@ function DepHistory({ user }) {
 					<div className='grid grid-cols-2 gap-2 pt-4'>
 						<Link
 							href={'/user/deposit'}
-							className='btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
+							className='btn underline hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
 						>
 							Back
 						</Link>
@@ -145,7 +145,7 @@ function DepHistory({ user }) {
 				)}
 
 				{/* ---------- button layout for page 2+ --------- */}
-				
+
 				{page > 1 && (
 					<>
 						<div className='grid grid-cols-2 gap-2 pt-4'>
@@ -170,7 +170,7 @@ function DepHistory({ user }) {
 
 						<Link
 							href={'/user/deposit'}
-							className='mt-2 btn hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
+							className='mt-2 btn underline hover:bg-gradient-to-br from-gray-700 via-cyan-600 to-gray-700'
 						>
 							Back
 						</Link>

@@ -57,7 +57,11 @@ function DepositModal({
 						Wallet Balance After Deposit:{' '}
 						<span
 							className={`font-bold ${
-								ethBalance - depositAmt < 0 ? 'text-red-600' : 'text-green-700'
+								ethBalance - depositAmt < 0
+									? 'text-red-600'
+									: ethBalance - depositAmt == ethBalance
+									? null
+									: 'text-cyan-700'
 							}`}
 						>
 							{(ethBalance - depositAmt).toFixed(4)}

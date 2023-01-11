@@ -58,7 +58,11 @@ function WithdrawalModal({
 						Deposited Balance After Transfer:{' '}
 						<span
 							className={`font-bold ${
-								depositedBalance - transferAmt < 0 ? 'text-red-600' : 'text-green-700'
+								depositedBalance - transferAmt < 0
+									? 'text-red-600'
+									: depositedBalance - transferAmt == depositedBalance
+									? null
+									: 'text-cyan-700'
 							}`}
 						>
 							{(Number(depositedBalance) - Number(transferAmt)).toFixed(4)}

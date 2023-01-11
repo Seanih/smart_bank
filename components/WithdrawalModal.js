@@ -48,9 +48,9 @@ function WithdrawalModal({
 						Wallet Balance After Withdrawal:{' '}
 						<span
 							className={`font-bold ${
-								ethBalance - withdrawalAmt < 0
-									? 'text-red-600'
-									: 'text-green-700'
+								ethBalance + withdrawalAmt > ethBalance
+									? 'text-green-700'
+									: null
 							}`}
 						>
 							{(Number(ethBalance) + Number(withdrawalAmt)).toFixed(4)}
@@ -62,7 +62,9 @@ function WithdrawalModal({
 							className={`font-bold ${
 								depositedBalance - withdrawalAmt < 0
 									? 'text-red-600'
-									: 'text-green-700'
+									: depositedBalance - withdrawalAmt == depositedBalance
+									? null
+									: 'text-cyan-700'
 							}`}
 						>
 							{(Number(depositedBalance) - Number(withdrawalAmt)).toFixed(4)}

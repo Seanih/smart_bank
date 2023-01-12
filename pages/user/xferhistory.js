@@ -141,12 +141,12 @@ function TransferHistory({ user }) {
 
 						<button
 							className={`btn ${
-								recentTxs.length < pageSize
+								recentTxs.length < pageSize * page
 									? 'bg-slate-600 text-white hover:bg-black hover:scale-100'
 									: 'hover:bg-gradient-to-br from-green-700 via-cyan-600 to-blue-700'
 							}`}
 							onClick={() => setPage(page + 1)}
-							disabled={recentTxs.length < pageSize ? true : false}
+							disabled={recentTxs.length < pageSize * page ? true : false}
 						>
 							Next Page
 						</button>
@@ -164,12 +164,12 @@ function TransferHistory({ user }) {
 							</button>
 							<button
 								className={`btn ${
-									recentTxs.length < pageSize
+									recentTxs.length < pageSize * page
 										? 'bg-slate-600 text-white hover:bg-black hover:scale-100'
 										: 'hover:bg-gradient-to-br from-green-700 via-cyan-600 to-blue-700'
 								}`}
 								onClick={() => setPage(page + 1)}
-								disabled={recentTxs.length < pageSize ? true : false}
+								disabled={recentTxs.length < pageSize * page ? true : false}
 							>
 								Next Page
 							</button>

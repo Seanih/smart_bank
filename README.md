@@ -1,6 +1,6 @@
 # Smart Bank DApp
 
-This project demonstrates how a bank would work as a decentralized application (with the exception of 'lending' or 'interest' features).
+This project demonstrates how a bank would work as a decentralized application (with the exception of 'lending' or 'interest' features). A user can deposit, withdraw, and transfer Goërli ETH to and from the contract, as well as view their transaction history. The wallet addresses of each unique user are stored in a MongoDB database.
 
 ---
 
